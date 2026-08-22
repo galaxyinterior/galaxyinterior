@@ -7,7 +7,7 @@ import { db } from '@/lib/firebase';
 import { 
   Plus, Edit2, Trash2, Layers, Save, X, IndianRupee, CheckCircle2
 } from 'lucide-react';
-import { PricingPackage } from '../../../../../Galaxy_Interior/src/types/pricing';
+import { PricingPackage } from '@/types/pricing';
 
 export default function PricingPackagesPage() {
   const { user } = useAuth();
@@ -81,7 +81,7 @@ export default function PricingPackagesPage() {
 
   const removeFeature = (index: number) => {
     if (formData.features.length <= 1) return;
-    const newFeatures = formData.features.filter((_, i) => i !== index);
+    const newFeatures = formData.features.filter((_: string, i: number) => i !== index);
     setFormData({ ...formData, features: newFeatures });
   };
 
@@ -90,7 +90,7 @@ export default function PricingPackagesPage() {
     if (!formData.name) return;
     
     // Clean up empty features
-    const cleanedFeatures = formData.features.filter(f => f.trim() !== '');
+    const cleanedFeatures = formData.features.filter((f: string) => f.trim() !== '');
     const finalData = { ...formData, features: cleanedFeatures };
 
     setIsSaving(true);
@@ -217,7 +217,7 @@ export default function PricingPackagesPage() {
             <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
               <label className="block text-sm font-bold text-brand-navy mb-4">Package Features (Displayed as Bullet Points)</label>
               <div className="space-y-3">
-                {formData.features.map((feature, index) => (
+                {formData.features.map((feature: string, index: number) => (
                   <div key={index} className="flex items-center gap-3">
                     <CheckCircle2 size={20} className="text-brand-yellow shrink-0" />
                     <input
@@ -309,7 +309,7 @@ export default function PricingPackagesPage() {
               <p className="text-gray-500 text-sm mb-6">{pkg.description}</p>
               
               <ul className="space-y-3">
-                {pkg.features.map((feature, idx) => (
+                {pkg.features.map((feature: string, idx: number) => (
                   <li key={idx} className="flex items-start gap-2 text-sm text-gray-700 font-medium">
                     <CheckCircle2 size={18} className="text-brand-yellow shrink-0 mt-0.5" />
                     <span>{feature}</span>

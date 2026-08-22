@@ -7,7 +7,7 @@ import { db } from '@/lib/firebase';
 import { 
   Plus, Edit2, Trash2, Box, Save, X, IndianRupee, Percent
 } from 'lucide-react';
-import { PricingItem, PricingCategory, PricingType } from '../../../../../Galaxy_Interior/src/types/pricing';
+import { PricingItem, PricingCategory, PricingType } from '@/types/pricing';
 
 export default function PricingItemsPage() {
   const { user } = useAuth();

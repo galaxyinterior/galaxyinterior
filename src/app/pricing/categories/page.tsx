@@ -7,7 +7,7 @@ import { db } from '@/lib/firebase';
 import { 
   Plus, Edit2, Trash2, Tag, AlertCircle, Save, X, GripVertical
 } from 'lucide-react';
-import { PricingCategory } from '../../../../../Galaxy_Interior/src/types/pricing'; // Reusing type from main app if possible, or redefine locally.
+import { PricingCategory } from '@/types/pricing'; // Reusing type from main app if possible, or redefine locally.
 
 // Since apps are separate, redefining type locally to avoid tricky relative imports
 interface Category {
