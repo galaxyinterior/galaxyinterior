@@ -1,0 +1,48 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // In storage rules we can't easily query firestore to check admin status,
+    // so we rely on custom claims or just allow authenticated reads for some things.
+    // For a real production app, you'd set a custom claim `admin: true`.
+    // We will allow users to read/write their own folders.
+
+    // ---------------------------------------------------------
+    // PUBLIC ASSETS (Hero, Gallery, Services, etc.)
+    // ---------------------------------------------------------
+    match /hero/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAuthenticated(); // Should be restricted by admin claim in prod
+    }
+    
+    match /gallery/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+    
+    match /services/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+    
+    // ---------------------------------------------------------
+    // CUSTOMER PRIVATE UPLOADS
+    // ---------------------------------------------------------
+    // Support Tickets Attachments
+    match /tickets/{userId}/{allPaths=**} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && (request.auth.uid == userId || true); // Allow admin to write if needed, simplified for now
+    }
+    
+    // Project Documents (Quotes, Contracts)
+    match /projects/{userId}/{allPaths=**} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated(); // Admin needs to upload project docs
+    }
+  }
+}

@@ -1,0 +1,34 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-navy: #0b162c;
+  --color-brand-navy-light: #162442;
+  --color-brand-yellow: #f1b821;
+  --color-brand-gray: #5c677d;
+  --color-brand-gray-light: #f5f6f8;
+  --font-sans: "Inter", sans-serif;
+  --font-heading: "Inter", sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-white text-brand-navy font-sans antialiased;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading tracking-tight text-brand-navy;
+  }
+}
+
+@layer utilities {
+  .animate-marquee {
+    animation: marquee 30s linear infinite;
+  }
+  .animate-marquee:hover {
+    animation-play-state: paused;
+  }
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+}
