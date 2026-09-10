@@ -65,11 +65,11 @@ export default function CTASection() {
           </Link>
 
           <a
-            href="tel:+917004465611"
+            href="tel:+919631980881"
             className="w-full sm:w-auto px-7 py-4 rounded-full bg-transparent hover:bg-white/5 text-gray-300 hover:text-white font-mono text-xs tracking-wider transition-colors flex items-center justify-center gap-2"
           >
             <PhoneCall className="w-3.5 h-3.5 text-brand-gold" />
-            <span>+91 70044 65611</span>
+            <span>+91 96319 80881</span>
           </a>
         </div>
 

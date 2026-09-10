@@ -103,15 +103,23 @@ export function Navbar() {
             ))}
           </div>
 
-          <div className="flex items-center space-x-6 shrink-0">
-            <span className="text-white/40 text-[9px]">JHARKHAND • BIHAR • WEST BENGAL</span>
+          <div className="flex items-center space-x-4 shrink-0">
+            <span className="text-white/40 text-[9px] hidden xl:inline">JHARKHAND • BIHAR • WEST BENGAL</span>
             <a 
-              href="tel:+917004465611" 
+              href="tel:+919631980881" 
               className="flex items-center text-brand-gold hover:text-white transition-colors font-bold tracking-wider"
-              aria-label="Call Galaxy Interior directly"
+              aria-label="Call Main Helpline +91 96319 80881"
             >
               <Phone size={11} className="mr-1.5" />
-              +91 70044 65611
+              +91 96319 80881 <span className="text-[9px] text-white/50 ml-1 font-normal">(Main)</span>
+            </a>
+            <span className="text-white/20 text-[9px]">•</span>
+            <a 
+              href="tel:+919122795726" 
+              className="flex items-center text-white/80 hover:text-brand-gold transition-colors font-semibold tracking-wider text-[10px]"
+              aria-label="Call Secondary Helpline +91 91227 95726"
+            >
+              +91 91227 95726
             </a>
           </div>
         </div>
@@ -502,13 +510,21 @@ export function Navbar() {
                 </Link>
               )}
 
-              <a 
-                href="tel:+919631980881" 
-                className="w-full text-white/70 py-2 text-center text-[10px] tracking-widest flex items-center justify-center"
-              >
-                <Phone size={12} className="mr-1.5 text-brand-gold" />
-                CALL +91 96319 80881
-              </a>
+              <div className="flex flex-col items-center space-y-1 pt-1 border-t border-white/[0.06]">
+                <a 
+                  href="tel:+919631980881" 
+                  className="w-full text-brand-gold hover:text-white py-1 text-center text-[11px] font-bold tracking-widest flex items-center justify-center"
+                >
+                  <Phone size={12} className="mr-1.5" />
+                  +91 96319 80881 (Main)
+                </a>
+                <a 
+                  href="tel:+919122795726" 
+                  className="w-full text-white/80 hover:text-brand-gold py-1 text-center text-[10px] font-semibold tracking-widest flex items-center justify-center"
+                >
+                  +91 91227 95726 (Sales & Support)
+                </a>
+              </div>
             </div>
 
           </div>

@@ -206,11 +206,11 @@ export default function ServiceAreasSection() {
 
           <div className="flex flex-col sm:flex-row items-center gap-4 shrink-0 w-full lg:w-auto">
             <a
-              href="tel:+917004465611"
+              href="tel:+919631980881"
               className="w-full sm:w-auto px-6 py-3.5 rounded-full bg-white/[0.08] hover:bg-white/[0.15] border border-white/20 text-white text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2"
             >
               <PhoneCall className="w-3.5 h-3.5 text-brand-gold" />
-              <span>+91 70044 65611</span>
+              <span>+91 96319 80881</span>
             </a>
             <Link
               href="/contact"

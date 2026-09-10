@@ -36,7 +36,8 @@ export function Footer() {
     fetchSettings();
   }, []);
 
-  const phone = settings?.phone || '+91 70044 65611';
+  const phoneMain = settings?.phone || '+91 96319 80881';
+  const phoneAlt = '+91 91227 95726';
   const email = settings?.email || 'contact@galaxyinteriorindia.com';
 
   return (
@@ -59,16 +60,24 @@ export function Footer() {
             </p>
 
             <div className="space-y-3 pt-2">
-              <div className="flex items-center space-x-3 text-sm">
-                <div className="w-8 h-8 rounded-full bg-brand-gold/10 border border-brand-gold/20 flex items-center justify-center text-brand-gold shrink-0">
+              <div className="flex items-start space-x-3 text-sm">
+                <div className="w-8 h-8 rounded-full bg-brand-gold/10 border border-brand-gold/20 flex items-center justify-center text-brand-gold shrink-0 mt-0.5">
                   <Phone size={14} />
                 </div>
-                <a 
-                  href={`tel:${phone.replace(/\s+/g, '')}`} 
-                  className="text-white font-bold hover:text-brand-gold transition-colors"
-                >
-                  {phone}
-                </a>
+                <div className="flex flex-col space-y-1">
+                  <a 
+                    href={`tel:${phoneMain.replace(/\s+/g, '')}`} 
+                    className="text-white font-bold hover:text-brand-gold transition-colors flex items-center"
+                  >
+                    {phoneMain} <span className="text-[10px] text-brand-gold font-semibold ml-2">(Main)</span>
+                  </a>
+                  <a 
+                    href={`tel:${phoneAlt.replace(/\s+/g, '')}`} 
+                    className="text-white/80 font-medium text-xs hover:text-brand-gold transition-colors flex items-center"
+                  >
+                    {phoneAlt} <span className="text-[10px] text-white/50 ml-2">(Sales & Support)</span>
+                  </a>
+                </div>
               </div>
 
               <div className="flex items-center space-x-3 text-sm">
