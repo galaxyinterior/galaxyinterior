@@ -1,20 +1,21 @@
+"use client";
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { db } from '@/lib/firebase';
 import { collection, onSnapshot, query } from 'firebase/firestore';
-import { 
-  Sparkles, 
-  ArrowUpRight, 
-  CheckCircle2, 
-  ShieldCheck, 
-  Building2, 
-  Layers, 
-  Compass, 
-  Wrench, 
-  Home, 
-  Hammer, 
-  Clock, 
+import {
+  Sparkles,
+  ArrowUpRight,
+  CheckCircle2,
+  ShieldCheck,
+  Building2,
+  Layers,
+  Compass,
+  Wrench,
+  Home,
+  Hammer,
+  Clock,
   FileCheck2,
   PhoneCall,
   Check
@@ -218,7 +219,7 @@ export default function ServicesPage() {
         snapshot.forEach((docSnap) => {
           const data = docSnap.data() as any;
           if (data.status === 'inactive') return;
-          
+
           // Check if already in CORE_SERVICES by slug/title
           const existing = CORE_SERVICES.find(c => c.slug === data.slug || c.title.toLowerCase() === data.title?.toLowerCase());
           if (existing) return;
@@ -265,11 +266,11 @@ export default function ServicesPage() {
 
   return (
     <main className="min-h-screen bg-[#faf8f5] text-[#111622] pt-28 md:pt-36">
-      
+
       {/* 1. HERO SECTION */}
       <section className="relative px-6 pb-20 md:pb-28 max-w-[1400px] mx-auto border-b border-[#eee7db]">
         <div className="max-w-4xl mx-auto text-center">
-          
+
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#eee7db] border border-[#ded8cb] text-brand-charcoal text-[11px] font-semibold tracking-[0.25em] uppercase mb-6">
             <Sparkles className="w-3.5 h-3.5 text-brand-gold" />
             <span>Integrated Studio Disciplines • Eastern India</span>
@@ -288,11 +289,10 @@ export default function ServicesPage() {
           <div className="flex flex-wrap justify-center items-center gap-2">
             <button
               onClick={() => setActiveTab('all')}
-              className={`px-4 py-2 rounded-xl text-xs font-medium uppercase tracking-wider transition-all duration-300 ${
-                activeTab === 'all'
+              className={`px-4 py-2 rounded-xl text-xs font-medium uppercase tracking-wider transition-all duration-300 ${activeTab === 'all'
                   ? 'bg-[#111622] text-white shadow-sm'
                   : 'bg-white hover:bg-gray-50 text-gray-600 border border-[#ded8cb]'
-              }`}
+                }`}
             >
               All Disciplines
             </button>
@@ -300,11 +300,10 @@ export default function ServicesPage() {
               <button
                 key={srv.id}
                 onClick={() => setActiveTab(srv.id)}
-                className={`px-4 py-2 rounded-xl text-xs font-medium uppercase tracking-wider transition-all duration-300 ${
-                  activeTab === srv.id
+                className={`px-4 py-2 rounded-xl text-xs font-medium uppercase tracking-wider transition-all duration-300 ${activeTab === srv.id
                     ? 'bg-[#111622] text-white shadow-sm'
                     : 'bg-white hover:bg-gray-50 text-gray-600 border border-[#ded8cb]'
-                }`}
+                  }`}
               >
                 {srv.number} {srv.title.split('&')[0]}
               </button>
@@ -321,13 +320,13 @@ export default function ServicesPage() {
           {filteredServices.map((service, index) => {
             const isEven = index % 2 === 0;
             return (
-              <div 
+              <div
                 key={service.id}
                 id={service.id}
                 className="bg-white rounded-3xl border border-[#ded8cb] p-6 md:p-12 lg:p-14 shadow-sm hover:shadow-luxury-hover transition-all duration-500 scroll-mt-36"
               >
                 <div className={`grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center`}>
-                  
+
                   {/* Image Column */}
                   <div className={`lg:col-span-6 ${!isEven ? 'lg:order-2' : ''}`}>
                     <div className="relative aspect-[4/3] rounded-2xl overflow-hidden border border-[#ded8cb] shadow-md group">
@@ -423,7 +422,7 @@ export default function ServicesPage() {
       {/* 3. 5-STEP UNIFIED EXECUTION JOURNEY */}
       <section className="py-24 md:py-32 bg-white border-b border-[#eee7db]">
         <div className="max-w-[1400px] mx-auto px-6">
-          
+
           <div className="text-center max-w-3xl mx-auto mb-20">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#eee7db] border border-[#ded8cb] text-brand-charcoal text-[11px] font-semibold tracking-[0.2em] uppercase mb-4">
               <Compass className="w-3.5 h-3.5 text-brand-gold" />
@@ -487,7 +486,7 @@ export default function ServicesPage() {
             {STUDIO_PILLARS.map((pillar) => {
               const Icon = pillar.icon;
               return (
-                <div 
+                <div
                   key={pillar.title}
                   className="bg-white rounded-3xl p-8 border border-[#ded8cb] shadow-sm flex flex-col"
                 >
@@ -510,7 +509,7 @@ export default function ServicesPage() {
 
       {/* 5. FINAL ARCHITECTURAL CTA */}
       <section className="py-28 md:py-36 bg-[#080d17] text-white relative overflow-hidden">
-        
+
         {/* Glow */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-brand-gold/[0.06] rounded-full blur-[120px] pointer-events-none" />
 
@@ -530,7 +529,7 @@ export default function ServicesPage() {
           </p>
 
           <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
-            <Link 
+            <Link
               href="/contact"
               className="w-full sm:w-auto px-9 py-4 rounded-full bg-brand-gold hover:bg-yellow-400 text-brand-charcoal font-bold text-xs uppercase tracking-[0.18em] transition-all shadow-[0_10px_30px_rgba(241,184,33,0.25)] hover:scale-105 flex items-center justify-center gap-2 cursor-target"
             >
@@ -538,7 +537,7 @@ export default function ServicesPage() {
               <ArrowUpRight className="w-4 h-4" />
             </Link>
 
-            <Link 
+            <Link
               href="/pricing/packages"
               className="w-full sm:w-auto px-8 py-4 rounded-full bg-white/[0.05] hover:bg-white/[0.1] text-white border border-white/20 font-bold text-xs uppercase tracking-[0.18em] transition-all flex items-center justify-center gap-2"
             >
