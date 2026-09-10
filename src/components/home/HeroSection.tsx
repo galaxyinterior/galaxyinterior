@@ -5,7 +5,7 @@ import { ChevronRight, ArrowRight, CheckCircle2, AlertCircle, Phone, MapPin, X, 
 import Link from 'next/link';
 import Image from 'next/image';
 import { db } from '@/lib/firebase';
-import { collection, addDoc, serverTimestamp, getDocs, query, orderBy } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, getDocs, query, orderBy, onSnapshot } from 'firebase/firestore';
 
 interface SlideData {
   id: string;
@@ -23,24 +23,24 @@ const DEFAULT_SLIDES: SlideData[] = [
     imageUrl: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=85&w=2400',
     title: 'HOMES DESIGNED AROUND YOU.',
     subtitle: 'From architectural blueprints and photorealistic 3D visualization to turnkey civil construction and bespoke interior execution.',
-    ctaText: 'Explore Projects',
-    ctaUrl: '/projects'
-  },
-  {
-    id: 'slide-2',
-    imageUrl: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=85&w=2400',
-    title: 'ENGINEERED WITH UNCOMPROMISING LUXURY.',
-    subtitle: 'End-to-end turnkey construction with transparent itemised BOQ, verified material brands, and strict daily site supervision.',
-    ctaText: 'Turnkey Packages',
+    ctaText: 'Explore Turnkey Packages',
     ctaUrl: '/pricing/packages'
   },
   {
+    id: 'slide-2',
+    imageUrl: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&q=85&w=2400',
+    title: 'UNCOMPROMISED CIVIL & INTERIOR EXCELLENCE.',
+    subtitle: '100% Century Club Prime BWP Marine Ply, German Hettich Hardware, Primary TMT Steel & Resident Site Civil Engineering.',
+    ctaText: 'View Portfolio Landmarks',
+    ctaUrl: '/projects'
+  },
+  {
     id: 'slide-3',
-    imageUrl: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=85&w=2400',
-    title: 'BESPOKE LIVING SPACES CRAFTED FOR GENERATIONS.',
-    subtitle: 'Modern layouts, master suites, and modular kitchen architecture tailored to your family’s unique lifestyle.',
-    ctaText: 'View Portfolio',
-    ctaUrl: '/gallery'
+    imageUrl: 'https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&q=85&w=2400',
+    title: 'CONTRACTUAL CERTAINTY. ZERO COST OVERRUNS.',
+    subtitle: 'Legally binding Master BOQ before site mobilization. Serving Ranchi, Patna, Kolkata, Bhagalpur, Deoghar, and 11 regional hubs.',
+    ctaText: 'Calculate Construction Cost',
+    ctaUrl: '/pricing'
   }
 ];
 
@@ -52,9 +52,9 @@ const VERIFIED_CITIES = [
 export default function HeroSection() {
   const [slides, setSlides] = useState<SlideData[]>(DEFAULT_SLIDES);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Form State
+  // Modal State
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -63,12 +63,11 @@ export default function HeroSection() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<null | 'success' | 'error'>(null);
 
-  // Fetch Firestore slides if available
+  // Real-time Firestore listener for hero slides
   useEffect(() => {
-    const fetchSlides = async () => {
-      try {
-        const q = query(collection(db, 'heroSlides'), orderBy('sortOrder', 'asc'));
-        const snapshot = await getDocs(q);
+    try {
+      const q = query(collection(db, 'heroSlides'), orderBy('sortOrder', 'asc'));
+      const unsubscribe = onSnapshot(q, (snapshot) => {
         const data = snapshot.docs
           .map(doc => ({ id: doc.id, ...doc.data() } as SlideData & { isActive?: boolean }))
           .filter(slide => slide.isActive !== false);
@@ -76,11 +75,13 @@ export default function HeroSection() {
         if (data.length > 0) {
           setSlides(data);
         }
-      } catch (err) {
-        console.error("Error fetching hero slides from Firebase:", err);
-      }
-    };
-    fetchSlides();
+      }, (err) => {
+        console.warn("Firestore heroSlides listener notice:", err);
+      });
+      return () => unsubscribe();
+    } catch (err) {
+      console.warn("Using default hero slides catalog");
+    }
   }, []);
 
   // Automatic slideshow progression

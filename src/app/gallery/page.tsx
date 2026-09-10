@@ -18,7 +18,7 @@ import {
   SlidersHorizontal
 } from "lucide-react";
 import { db } from "@/lib/firebase";
-import { collection, getDocs, query, orderBy } from "firebase/firestore";
+import { collection, getDocs, query, orderBy, onSnapshot } from "firebase/firestore";
 
 interface DesignIdea {
   id: string;
@@ -232,12 +232,56 @@ const CURATED_DESIGN_IDEAS: DesignIdea[] = [
 export default function GalleryPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [activeIdea, setActiveIdea] = useState<DesignIdea | null>(null);
+  const [ideas, setIdeas] = useState<DesignIdea[]>(CURATED_DESIGN_IDEAS);
+
+  useEffect(() => {
+    try {
+      const q = query(collection(db, 'gallery_images'));
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+        const fetched: DesignIdea[] = [];
+        snapshot.forEach((docSnap) => {
+          const data = docSnap.data() as any;
+          if (data.status === 'inactive') return;
+          fetched.push({
+            id: docSnap.id,
+            title: data.title || 'Architectural Design Showcase',
+            category: (data.category?.toLowerCase() || 'living') as any,
+            categoryLabel: data.category || 'Design Inspiration',
+            image: data.imageUrl || data.image || '/generated/inspiration_modular_kitchen.jpg',
+            shortDesc: data.description || 'Custom crafted space designed and executed by Galaxy Interior.',
+            spaceArea: 'Custom Specifications',
+            designConcept: data.description || 'Bespoke design concept executed with engineering precision.',
+            finishes: [
+              { label: 'Joinery Core', value: 'Century Club Prime BWP 710 Marine Ply' },
+              { label: 'Surface Finish', value: 'High-Pressure Acrylic / Smoked Veneer' },
+              { label: 'Hardware', value: 'German Hettich / Hafele Soft-Close Fittings' }
+            ],
+            highlights: [
+              'Custom factory fabrication with 10-year timber warranty',
+              'Vastu compliant spatial layout and lighting design',
+              'On-site resident engineer quality supervision'
+            ],
+            architecturalTip: 'Ensure lighting color temperatures match across adjacent living zones for cohesive ambiance.'
+          });
+        });
+
+        if (fetched.length > 0) {
+          setIdeas([...fetched, ...CURATED_DESIGN_IDEAS]);
+        }
+      }, (err) => {
+        console.warn('Firestore gallery_images listener notice:', err);
+      });
+      return () => unsubscribe();
+    } catch (e) {
+      console.warn('Fallback to local curated design catalog');
+    }
+  }, []);
 
   // Filtered ideas
   const filteredIdeas = useMemo(() => {
-    if (selectedCategory === "all") return CURATED_DESIGN_IDEAS;
-    return CURATED_DESIGN_IDEAS.filter((idea) => idea.category === selectedCategory);
-  }, [selectedCategory]);
+    if (selectedCategory === "all") return ideas;
+    return ideas.filter((idea) => idea.category === selectedCategory || idea.categoryLabel.toLowerCase().includes(selectedCategory.toLowerCase()));
+  }, [selectedCategory, ideas]);
 
   return (
     <main className="bg-[#faf8f5] text-[#0c121e] min-h-screen">

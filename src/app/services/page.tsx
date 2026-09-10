@@ -1,8 +1,8 @@
-'use client';
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { db } from '@/lib/firebase';
+import { collection, onSnapshot, query } from 'firebase/firestore';
 import { 
   Sparkles, 
   ArrowUpRight, 
@@ -207,8 +207,59 @@ const STUDIO_PILLARS = [
 
 export default function ServicesPage() {
   const [activeTab, setActiveTab] = useState<string>('all');
+  const [servicesList, setServicesList] = useState<ServiceDiscipline[]>(CORE_SERVICES);
 
-  const filteredServices = CORE_SERVICES.filter(
+  useEffect(() => {
+    try {
+      const q = query(collection(db, 'services'));
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+        const fetched: ServiceDiscipline[] = [];
+        let idx = 6;
+        snapshot.forEach((docSnap) => {
+          const data = docSnap.data() as any;
+          if (data.status === 'inactive') return;
+          
+          // Check if already in CORE_SERVICES by slug/title
+          const existing = CORE_SERVICES.find(c => c.slug === data.slug || c.title.toLowerCase() === data.title?.toLowerCase());
+          if (existing) return;
+
+          fetched.push({
+            id: docSnap.id,
+            number: String(idx).padStart(2, '0'),
+            slug: data.slug ? `/services/${data.slug}` : '/contact',
+            title: data.title || 'Specialized Studio Discipline',
+            category: data.category || 'Architectural Services',
+            tagline: data.shortDescription || 'Bespoke architectural execution managed under a single studio contract.',
+            description: data.fullDescription || data.shortDescription || 'Full turnkey execution with resident engineering supervision and zero cost escalation.',
+            image: data.image || '/services/service_design_1787300013035.jpg',
+            deliverables: Array.isArray(data.deliverables) ? data.deliverables : [
+              'Custom CAD Blueprints & Vastu Floor Plans',
+              'Itemised Master BOQ Specification Contract',
+              'Resident Site Engineer Supervision',
+              '10-Year Timber & Structural Warranty'
+            ],
+            specs: [
+              { label: 'Starting Rate', value: data.startingPrice ? `₹${data.startingPrice}/sq.ft` : 'Quote On Request' },
+              { label: 'Contract Type', value: 'Zero Escalation Master BOQ' },
+              { label: 'Supervision', value: 'Dedicated Site Engineer' }
+            ]
+          });
+          idx++;
+        });
+
+        if (fetched.length > 0) {
+          setServicesList([...CORE_SERVICES, ...fetched]);
+        }
+      }, (err) => {
+        console.warn('Firestore services listener notice:', err);
+      });
+      return () => unsubscribe();
+    } catch (e) {
+      console.warn('Fallback to core discipline catalog');
+    }
+  }, []);
+
+  const filteredServices = servicesList.filter(
     (s) => activeTab === 'all' || s.id === activeTab
   );
 
@@ -245,7 +296,7 @@ export default function ServicesPage() {
             >
               All Disciplines
             </button>
-            {CORE_SERVICES.map((srv) => (
+            {servicesList.map((srv) => (
               <button
                 key={srv.id}
                 onClick={() => setActiveTab(srv.id)}
