@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Our Services',
-  description: 'Discover our comprehensive range of interior design and construction services.',
+  title: 'Architectural & Interior Services | Galaxy Interior India',
+  description: 'Comprehensive residential architecture, turnkey civil construction, 3D photorealistic design, and bespoke interior execution across Jharkhand, Bihar, and West Bengal.',
   openGraph: {
-    title: 'Our Services | Galaxy Interior',
-    description: 'Discover our comprehensive range of interior design and construction services.',
+    title: 'Architectural & Interior Services | Galaxy Interior India',
+    description: 'Comprehensive residential architecture, turnkey civil construction, 3D photorealistic design, and bespoke interior execution across Jharkhand, Bihar, and West Bengal.',
   },
 };
 

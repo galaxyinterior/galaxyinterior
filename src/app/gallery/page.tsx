@@ -1,161 +1,529 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
-import CircularGallery from '@/components/CircularGallery';
-import { db } from '@/lib/firebase';
-import { collection, getDocs, query, orderBy } from 'firebase/firestore';
-import { ChevronDown, ImageIcon, Sparkles } from 'lucide-react';
+import React, { useState, useEffect, useMemo } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import {
+  Sparkles,
+  Maximize2,
+  X,
+  ArrowRight,
+  PhoneCall,
+  CheckCircle2,
+  Layers,
+  Lightbulb,
+  Compass,
+  Palette,
+  Shield,
+  SlidersHorizontal
+} from "lucide-react";
+import { db } from "@/lib/firebase";
+import { collection, getDocs, query, orderBy } from "firebase/firestore";
 
-const DEFAULT_GALLERY_IMAGES = [
-  { image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=1200", text: "Luxury Living" },
-  { image: "https://images.unsplash.com/photo-1541888081297-c819dc788916?auto=format&fit=crop&q=80&w=1200", text: "Modern Build" },
-  { image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=1200", text: "Cozy Interior" },
-  { image: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&q=80&w=1200", text: "Turnkey Project" },
-  { image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&q=80&w=1200", text: "Renovation" },
-  { image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1200", text: "Elegant Spaces" },
-  { image: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=1200", text: "Office Design" },
-  { image: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&q=80&w=1200", text: "Smart Home" },
-  { image: "https://images.unsplash.com/photo-1556912172-45b7abe8b7e1?auto=format&fit=crop&q=80&w=1200", text: "Kitchen Remodel" },
-  { image: "https://images.unsplash.com/photo-1507089947368-19c1da9775ae?auto=format&fit=crop&q=80&w=1200", text: "Minimalist" },
-  
-  // Extra images for the second section
-  { image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80&w=1200", text: "Rustic Vibes" },
-  { image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=1200", text: "Bathroom Setup" },
-  { image: "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&q=80&w=1200", text: "Bright Dining" },
-  { image: "https://images.unsplash.com/photo-1599619351208-6e6a20028742?auto=format&fit=crop&q=80&w=1200", text: "Bedroom Comfort" },
-  { image: "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&q=80&w=1200", text: "Living Space" }
+interface DesignIdea {
+  id: string;
+  title: string;
+  category: "living" | "kitchen" | "bedroom" | "ceiling" | "flooring" | "paneling";
+  categoryLabel: string;
+  image: string;
+  shortDesc: string;
+  spaceArea: string;
+  designConcept: string;
+  finishes: { label: string; value: string }[];
+  highlights: string[];
+  architecturalTip: string;
+}
+
+const CURATED_DESIGN_IDEAS: DesignIdea[] = [
+  {
+    id: "idea-kitchen-01",
+    title: "Handleless Matte Acrylic Modular Kitchen",
+    category: "kitchen",
+    categoryLabel: "Modular Kitchen",
+    image: "/generated/inspiration_modular_kitchen.jpg",
+    shortDesc: "Anti-scratch acrylic cabinetry with integrated Gola profile channels and non-porous quartz countertops.",
+    spaceArea: "180 – 260 sq.ft.",
+    designConcept:
+      "A minimalist culinary pavilion optimized around the Golden Cooking Triangle (Prep, Cook, Clean) with zero visible handles, concealed appliances, and silent German soft-close drawers.",
+    finishes: [
+      { label: "Cabinet Carcass", value: "Century Club Prime BWP 710 Marine Plywood" },
+      { label: "Shutter Surface", value: "1.5mm High-Pressure Anti-Fingerprint Matte Acrylic" },
+      { label: "Countertop", value: "KalingaStone 20mm Non-Porous Engineered Quartz" },
+      { label: "Hardware & Slides", value: "Hettich InnoTech Atira Double-Wall Metal Drawers" },
+      { label: "Lighting", value: "Concealed 3000K warm under-cabinet LED task profiles" }
+    ],
+    highlights: [
+      "Zero-scratch, thermal-resistant acrylic shutters with PUR hot-melt edge banding",
+      "Corner carousel pull-out and tall pantry larder with 120kg weight capacity",
+      "Integrated pull-out waste sorting bins and acoustic under-mount sink pad"
+    ],
+    architecturalTip:
+      "Orient your prep counter toward natural northern light to prevent shadows when chopping, and ensure the chimney duct length is under 10 feet with minimal bends for optimal suction."
+  },
+  {
+    id: "idea-living-01",
+    title: "Double-Height Contemporary Living Salon",
+    category: "living",
+    categoryLabel: "Living & Foyers",
+    image: "/services/service_interior_1787300041689.jpg",
+    shortDesc: "Monumental living space featuring acoustic fluted louvers, 22ft ceiling clearance, and indirect warm illumination.",
+    spaceArea: "450 – 700 sq.ft.",
+    designConcept:
+      "Conceived to host grand family gatherings while maintaining an atmosphere of tranquil intimacy through textured vertical fluting and zoned ambient lighting.",
+    finishes: [
+      { label: "Wall Paneling", value: "Charcoal composite louvers & smoked walnut veneer" },
+      { label: "Flooring", value: "Italian Bottochino natural marble with diamond mirror buff" },
+      { label: "Ceiling", value: "Saint-Gobain Gyproc with concealed magnetic profile tracks" },
+      { label: "Fittings", value: "Recessed anti-glare COB downlights (CRI > 92)" }
+    ],
+    highlights: [
+      "22ft vertical fluted feature wall seamlessly concealing powder room access",
+      "Layered illumination: cove perimeter lighting, downlights, and statement brass pendant",
+      "Seamless bookmatched Italian marble slabs with 1mm hairline epoxy joints"
+    ],
+    architecturalTip:
+      "In double-height living spaces, acoustic wall paneling is essential to absorb ambient reverberation and eliminate echoing during conversations."
+  },
+  {
+    id: "idea-ceiling-01",
+    title: "Architectural Cove & Magnetic Track Ceiling",
+    category: "ceiling",
+    categoryLabel: "False Ceilings & Lighting",
+    image: "/generated/inspiration_false_ceiling.jpg",
+    shortDesc: "Curved gypsum false ceiling with indirect perimeter illumination and modular magnetic track profiles.",
+    spaceArea: "Universal (All Rooms)",
+    designConcept:
+      "Eliminating harsh direct ceiling glare by bouncing soft 3000K warm illumination off matte white gypsum planes, punctuated by movable magnetic spotlights.",
+    finishes: [
+      { label: "Board Material", value: "Saint-Gobain Gyproc 12.5mm Moisture-Resistant Plasterboard" },
+      { label: "Framing System", value: "G.I. perimeter channels (0.5mm thickness)" },
+      { label: "Track System", value: "24V Low-Voltage Magnetic Aluminum Recessed Track" },
+      { label: "Driver & CCT", value: "Flicker-free Mean Well drivers (2700K - 3000K Dim-to-Warm)" }
+    ],
+    highlights: [
+      "Concealed curtain pelmet tracks with integrated mood lighting",
+      "Magnetic spotlights and linear diffusers can be rearranged without tools",
+      "Zero-sag guarantee with reinforced ceiling hanger intervals"
+    ],
+    architecturalTip:
+      "Maintain at least a 100mm drop for ambient cove illumination to achieve an even gradient of light without exposing individual LED diode hot spots."
+  },
+  {
+    id: "idea-paneling-01",
+    title: "Acoustic Fluted Paneling & Media Wall",
+    category: "paneling",
+    categoryLabel: "Acoustic Wall Paneling",
+    image: "/generated/inspiration_tv_unit.jpg",
+    shortDesc: "Sculpted fluted louvers, integrated media credenza, and concealed cabling for master entertainment consoles.",
+    spaceArea: "120 – 200 sq.ft. (Wall Surface)",
+    designConcept:
+      "Unifying entertainment electronics into an architectural focal point while disguising all power bricks, gaming consoles, and cable spaghetti.",
+    finishes: [
+      { label: "Substrate", value: "Century Club Prime BWP 710 Plywood" },
+      { label: "Fluted Finish", value: "Extruded Charcoal Polymer Louver Sheets" },
+      { label: "Credenza Top", value: "Statuario Gold Quartz with beveled bullnose" },
+      { label: "Hardware", value: "Hafele Push-to-Open heavy concealed slides" }
+    ],
+    highlights: [
+      "Backlit floating TV backer with warm amber ambient halo",
+      "Acoustic backing prevents sound transmission into adjoining master bedrooms",
+      "Ventilated media drawers preventing amplifier and console overheating"
+    ],
+    architecturalTip:
+      "Incorporate concealed PVC conduits behind the paneling during rough-in to allow seamless addition of future HDMI or fiber optic connections."
+  },
+  {
+    id: "idea-flooring-01",
+    title: "Bookmatched Italian Statuario Marble Floor",
+    category: "flooring",
+    categoryLabel: "Italian Marble & Tiles",
+    image: "/generated/inspiration_italian_tiles.jpg",
+    shortDesc: "Hand-selected Italian marble with bookmatched natural veining and multi-stage diamond polishing.",
+    spaceArea: "Living, Dining & Master Suites",
+    designConcept:
+      "Creating an expansive mirror-like floor plane that reflects natural daylight and elevates the tactile grandeur of the entire residence.",
+    finishes: [
+      { label: "Material", value: "Authentic Italian Statuario / Michelangelo Marble (20mm)" },
+      { label: "Adhesive", value: "Laticrete Platinum latex-fortified polymer mortar" },
+      { label: "Grout", value: "Tenax Italian matching epoxy color-matched resin" },
+      { label: "Buffing", value: "8-Stage Klindex Diamond disc crystallization process" }
+    ],
+    highlights: [
+      "Continuous symmetrical vein matching curated from sequential quarry blocks",
+      "Silicone nano-sealer coating prevents turmeric, tea, and red wine staining",
+      "Seamless flush expansion joints preventing tile bucking across regional climate shifts"
+    ],
+    architecturalTip:
+      "Natural Italian marble must be allowed to breathe; avoid chemical acid washes and specify pH-neutral stone conditioners for lifetime luster."
+  },
+  {
+    id: "idea-bedroom-01",
+    title: "Master Sanctuary with Integrated Fluted Headboard",
+    category: "bedroom",
+    categoryLabel: "Master Bedroom Suites",
+    image: "/generated/interior_gallery_2.png",
+    shortDesc: "Floor-to-ceiling upholstered velvet headboard, floating timber nightstands, and soft cove illumination.",
+    spaceArea: "220 – 340 sq.ft.",
+    designConcept:
+      "A soothing decompression suite combining acoustic fabric walling with natural oak timber warmth, designed for deep restorative sleep.",
+    finishes: [
+      { label: "Headboard Fabric", value: "D'Decor stain-resistant velvet with acoustic foam" },
+      { label: "Woodwork", value: "American White Oak veneer with zero-gloss PU seal" },
+      { label: "Wardrobe Framing", value: "Bronze anodized aluminum profiles with fluted glass" },
+      { label: "Bed Base", value: "Heavy-duty hydraulic lift mechanism with Century BWP frame" }
+    ],
+    highlights: [
+      "Floor-to-ceiling vertical fluting with integrated brass reading gooseneck sconces",
+      "Cantilevered floating bedside drawers with wireless smartphone charging pads",
+      "Concealed master wardrobe dressing suite with automatic sensor illumination"
+    ],
+    architecturalTip:
+      "Position the master bed along the South or West wall according to Vastu Shastra, ensuring the head faces South or East for biological alignment."
+  },
+  {
+    id: "idea-paneling-02",
+    title: "Natural Teak Louver Room Partition",
+    category: "paneling",
+    categoryLabel: "Acoustic Wall Paneling",
+    image: "/generated/fac_wall_panelling.png",
+    shortDesc: "Semi-permeable vertical timber screen defining dining and formal salon zones without blocking daylight.",
+    spaceArea: "80 – 140 sq.ft. (Screen)",
+    designConcept:
+      "Delineating functional spaces in an open-concept layout while preserving air circulation and visual depth.",
+    finishes: [
+      { label: "Timber", value: "First-Class CP Seasoned Teak Wood (1.5 x 3 inch slats)" },
+      { label: "Coating", value: "Asian Paints PU Luxury Wood Finish (Matte Satin)" },
+      { label: "Anchors", value: "Concealed stainless steel floor-ceiling tension pins" }
+    ],
+    highlights: [
+      "Rotatable or fixed timber louvers providing flexible visual privacy",
+      "Clean geometric shadows cast across marble floors during afternoon sunlight",
+      "100% solid timber construction free of warping or seasonal joint splitting"
+    ],
+    architecturalTip:
+      "Semi-private timber screens allow you to preserve open-concept vistas while meeting traditional family privacy requirements."
+  },
+  {
+    id: "idea-flooring-02",
+    title: "Herringbone Engineered Hardwood Flooring",
+    category: "flooring",
+    categoryLabel: "Italian Marble & Tiles",
+    image: "/generated/inspiration_wooden_flooring.jpg",
+    shortDesc: "Multi-layer engineered European oak laid in classic herringbone pattern with acoustic underlayment.",
+    spaceArea: "Master Suites & Private Libraries",
+    designConcept:
+      "Infusing warmth and European sophistication underfoot, creating quiet acoustic tranquility in private sleeping quarters.",
+    finishes: [
+      { label: "Wood Species", value: "European White Oak (4mm real timber top layer)" },
+      { label: "Pattern", value: "Classic 90-degree Herringbone with micro-bevel edges" },
+      { label: "Underlay", value: "3mm High-Density IXPE foam with moisture barrier film" },
+      { label: "Topcoat", value: "UV-cured anti-scratch aluminum oxide lacquer" }
+    ],
+    highlights: [
+      "Engineered multi-ply core prevents expansion/contraction in regional monsoon humidity",
+      "Warm to the touch during cold winter mornings in Ranchi and Deoghar",
+      "High slip-resistance and sound dampening rating"
+    ],
+    architecturalTip:
+      "Pair herringbone timber floors with neutral off-white or ivory walls so the geometric rhythm of the floor remains the hero element."
+  }
 ];
 
 export default function GalleryPage() {
-  const [images, setImages] = useState(DEFAULT_GALLERY_IMAGES);
-  const [loading, setLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [activeIdea, setActiveIdea] = useState<DesignIdea | null>(null);
 
-  useEffect(() => {
-    const fetchGalleryImages = async () => {
-      try {
-        const q = query(collection(db, "gallery_images"), orderBy("createdAt", "desc"));
-        const querySnapshot = await getDocs(q);
-        
-        if (!querySnapshot.empty) {
-          const loadedImages = querySnapshot.docs
-            .map(doc => doc.data())
-            .filter(data => data.isActive !== false) // Default to true if missing
-            .map(data => ({
-              image: data.imageUrl || data.url || data.image,
-              text: data.title || data.text || 'Gallery Image'
-            }));
-          
-          if (loadedImages.length > 0) {
-            setImages(loadedImages);
-          }
-        }
-      } catch (error) {
-        console.error("Error loading gallery images from Firebase:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchGalleryImages();
-  }, []);
-
-  // Split images: First 10 for CircularGallery, rest for Masonry
-  const topImages = images.slice(0, 10);
-  const restImages = images.slice(10);
+  // Filtered ideas
+  const filteredIdeas = useMemo(() => {
+    if (selectedCategory === "all") return CURATED_DESIGN_IDEAS;
+    return CURATED_DESIGN_IDEAS.filter((idea) => idea.category === selectedCategory);
+  }, [selectedCategory]);
 
   return (
-    <main className="bg-brand-navy min-h-screen text-white pt-40 pb-10">
-
-      {/* HEADER */}
-      <div className="max-w-[1400px] mx-auto px-6 mb-16 text-center">
-        <div className="inline-flex items-center px-6 py-2 border border-brand-yellow/30 rounded-full mb-6 backdrop-blur-sm bg-brand-navy/50">
-          <Sparkles className="text-brand-yellow w-4 h-4 mr-2" />
-          <span className="text-brand-yellow font-bold tracking-widest uppercase text-xs">Our Masterpieces</span>
-        </div>
-        <h1 className="text-5xl md:text-7xl font-black mb-6 drop-shadow-2xl text-white">
-          Project <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-yellow to-yellow-200">Gallery</span>
-        </h1>
-        <p className="text-gray-400 text-lg md:text-xl font-medium max-w-2xl mx-auto">
-          Explore our finest interior, construction, and turnkey projects brought to life. Scroll horizontally to view featured works.
-        </p>
-      </div>
-
-      {/* SECTION 1: CIRCULAR GALLERY (First 10 Images) */}
-      <section className="w-full relative overflow-hidden" style={{ height: '700px' }}>
-        {loading ? (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-16 h-16 border-4 border-brand-yellow border-t-transparent rounded-full animate-spin"></div>
-          </div>
-        ) : (
-          <CircularGallery
-            items={topImages}
-            bend={3}
-            textColor="#ffffff"
-            borderRadius={0.05}
-            scrollEase={0.02}
-            fontUrl="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap"
-            font="bold 30px Orbitron"
+    <main className="bg-[#faf8f5] text-[#0c121e] min-h-screen">
+      {/* 1. EDITORIAL HEADER */}
+      <section className="relative pt-32 pb-20 bg-[#0c121e] text-[#faf8f5] overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/generated/inspiration_modular_kitchen.jpg"
+            alt="Galaxy Interior Design Archive"
+            fill
+            priority
+            className="object-cover opacity-20"
+            sizes="100vw"
           />
-        )}
-        
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center animate-bounce z-10 pointer-events-none">
-          <span className="text-white/50 text-xs tracking-widest uppercase font-bold mb-2">Drag or Scroll to View</span>
-          <ChevronDown className="text-brand-yellow" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0c121e] via-[#0c121e]/85 to-transparent" />
+        </div>
+
+        <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#faf8f5]/10 border border-[#c89d28]/30 backdrop-blur-md mb-6">
+            <Sparkles className="w-3.5 h-3.5 text-[#c89d28]" />
+            <span className="text-[11px] font-semibold tracking-[0.25em] uppercase text-[#c89d28]">
+              Design Ideas &amp; Inspiration Archive
+            </span>
+          </div>
+
+          <h1 className="font-serif text-4xl sm:text-6xl md:text-7xl font-normal tracking-tight leading-[1.1] mb-6">
+            Tactile Textures. Bespoke Joinery. <br />
+            <span className="italic font-light text-[#c89d28]">Timeless Architectural Form.</span>
+          </h1>
+
+          <p className="text-gray-300 text-base sm:text-xl font-light max-w-3xl mx-auto leading-relaxed mb-8">
+            Explore our curated material archive of bespoke kitchens, double-height salons, false ceiling channels, and Italian marble finishes. Click any concept to inspect architectural specifications.
+          </p>
+
+          <div className="flex flex-wrap items-center justify-center gap-6 pt-6 border-t border-white/10 text-xs sm:text-sm font-light text-gray-300">
+            <span className="flex items-center gap-1.5">
+              <Shield className="w-4 h-4 text-[#c89d28]" /> Century Club Prime Plywood
+            </span>
+            <span className="flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-[#c89d28]" /> German Hettich Hardware
+            </span>
+            <span className="flex items-center gap-1.5">
+              <Palette className="w-4 h-4 text-[#c89d28]" /> Bookmatched Italian Marble
+            </span>
+          </div>
         </div>
       </section>
 
-      {/* SECTION 2: MASONRY GRID (Rest of the Images) */}
-      {restImages.length > 0 && (
-        <section className="py-24 bg-white text-brand-navy mt-10 rounded-t-[3rem] relative">
-          <div className="max-w-[1400px] mx-auto px-6">
-            <div className="flex flex-col md:flex-row justify-between items-end mb-16">
-              <div>
-                <h4 className="text-brand-yellow text-sm font-bold tracking-widest uppercase mb-4 flex items-center">
-                  <ImageIcon className="w-4 h-4 mr-2" /> More Projects
-                </h4>
-                <h2 className="text-4xl md:text-5xl font-black">Extensive Portfolio</h2>
+      {/* 2. CATEGORY FILTER TABS */}
+      <section className="sticky top-16 z-30 bg-[#faf8f5]/90 backdrop-blur-md border-b border-black/5 py-4 px-6">
+        <div className="max-w-7xl mx-auto flex items-center gap-2 overflow-x-auto scrollbar-none pb-2 sm:pb-0">
+          <span className="text-xs font-semibold uppercase tracking-wider text-gray-400 mr-2 shrink-0 hidden md:inline">
+            Space:
+          </span>
+          {(
+            [
+              { id: "all", label: "All Spaces" },
+              { id: "kitchen", label: "Modular Kitchens" },
+              { id: "living", label: "Living & Foyers" },
+              { id: "bedroom", label: "Master Suites" },
+              { id: "ceiling", label: "Ceilings & Lighting" },
+              { id: "flooring", label: "Italian Tiles & Marble" },
+              { id: "paneling", label: "Acoustic Wall Paneling" }
+            ] as const
+          ).map((cat) => (
+            <button
+              key={cat.id}
+              onClick={() => setSelectedCategory(cat.id)}
+              className={`px-4 py-2 rounded-full text-xs font-semibold tracking-wider uppercase transition-all shrink-0 cursor-pointer ${
+                selectedCategory === cat.id
+                  ? "bg-[#0c121e] text-[#faf8f5] shadow-sm"
+                  : "bg-white text-gray-600 hover:text-black border border-black/5"
+              }`}
+            >
+              {cat.label}
+            </button>
+          ))}
+        </div>
+      </section>
+
+      {/* 3. DESIGN IDEAS MASONRY GRID */}
+      <section className="py-16 px-6 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {filteredIdeas.map((idea) => (
+            <div
+              key={idea.id}
+              onClick={() => setActiveIdea(idea)}
+              className="group bg-white rounded-3xl overflow-hidden border border-black/5 shadow-sm hover:shadow-xl transition-all duration-500 flex flex-col cursor-pointer"
+            >
+              {/* Image */}
+              <div className="relative h-72 w-full overflow-hidden bg-black/5">
+                <Image
+                  src={idea.image}
+                  alt={idea.title}
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-700"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
+
+                <div className="absolute top-4 left-4 bg-[#0c121e]/80 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-semibold tracking-wider uppercase text-[#c89d28] border border-[#c89d28]/30">
+                  {idea.categoryLabel}
+                </div>
+
+                <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md p-2 rounded-full text-[#0c121e] shadow-md opacity-0 group-hover:opacity-100 transition-opacity">
+                  <Maximize2 size={14} />
+                </div>
+
+                <div className="absolute bottom-4 left-4 bg-black/40 backdrop-blur-md px-3 py-1 rounded-md text-xs text-white font-light">
+                  {idea.spaceArea}
+                </div>
+              </div>
+
+              {/* Body */}
+              <div className="p-7 flex flex-col flex-grow justify-between">
+                <div>
+                  <h3 className="font-serif text-2xl font-normal text-[#0c121e] mb-3 group-hover:text-[#c89d28] transition-colors leading-snug">
+                    {idea.title}
+                  </h3>
+                  <p className="text-gray-600 text-xs sm:text-sm font-light leading-relaxed mb-6">
+                    {idea.shortDesc}
+                  </p>
+
+                  {/* Highlights */}
+                  <div className="space-y-1.5 mb-6 pt-4 border-t border-black/5">
+                    {idea.finishes.slice(0, 2).map((f, fIdx) => (
+                      <div key={fIdx} className="text-xs text-gray-500 flex items-center justify-between">
+                        <span className="font-medium text-gray-400">{f.label}:</span>
+                        <span className="text-gray-700 font-light truncate ml-2">{f.value}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Inspect Link */}
+                <div className="pt-4 border-t border-black/5 flex items-center justify-between text-xs font-semibold tracking-widest uppercase text-[#0c121e] group-hover:text-[#c89d28] transition-colors">
+                  <span>Inspect Design Specs</span>
+                  <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1.5 transition-transform" />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 4. PHASE 10: INTERACTIVE DETAIL INSPECTION MODAL */}
+      {activeIdea && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/70 backdrop-blur-sm animate-fade-in">
+          <div className="bg-white rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-black/10 relative">
+            {/* Close Button */}
+            <button
+              onClick={() => setActiveIdea(null)}
+              className="absolute top-6 right-6 z-20 w-10 h-10 rounded-full bg-white/90 backdrop-blur-md shadow-md flex items-center justify-center text-gray-700 hover:text-black transition-colors cursor-pointer"
+            >
+              <X size={20} />
+            </button>
+
+            {/* Modal Image Hero */}
+            <div className="relative h-72 sm:h-96 w-full overflow-hidden bg-[#0c121e]">
+              <Image
+                src={activeIdea.image}
+                alt={activeIdea.title}
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 896px"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+              <div className="absolute bottom-6 left-6 right-6 text-white">
+                <span className="text-[10px] font-semibold tracking-[0.2em] uppercase text-[#c89d28] block mb-1">
+                  {activeIdea.categoryLabel} &bull; {activeIdea.spaceArea}
+                </span>
+                <h2 className="font-serif text-2xl sm:text-4xl font-normal leading-tight">
+                  {activeIdea.title}
+                </h2>
               </div>
             </div>
 
-            <div className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
-              {restImages.map((img, index) => (
-                <div key={index} className="relative overflow-hidden rounded-2xl group gallery-item break-inside-avoid">
-                  <Image 
-                    src={img.image} 
-                    alt={img.text} 
-                    width={1200}
-                    height={800}
-                    className="w-full h-auto object-cover group-hover:scale-110 transition-transform duration-700"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-end p-8">
-                    <h3 className="text-white font-black text-2xl transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
-                      {img.text}
-                    </h3>
-                  </div>
+            {/* Modal Content */}
+            <div className="p-6 sm:p-10 space-y-8">
+              {/* Concept */}
+              <div>
+                <h3 className="text-xs font-semibold uppercase tracking-[0.25em] text-[#c89d28] mb-2">
+                  Architectural Concept
+                </h3>
+                <p className="text-gray-600 font-light text-base sm:text-lg leading-relaxed">
+                  {activeIdea.designConcept}
+                </p>
+              </div>
+
+              {/* Material Schedule Table */}
+              <div className="bg-[#faf8f5] p-6 rounded-2xl border border-black/5">
+                <h3 className="font-serif text-xl text-[#0c121e] mb-4 flex items-center gap-2">
+                  <Layers className="w-5 h-5 text-[#c89d28]" /> Material &amp; Specification Schedule
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm">
+                  {activeIdea.finishes.map((f, idx) => (
+                    <div key={idx} className="pb-3 border-b border-black/5">
+                      <span className="text-gray-400 font-medium block uppercase tracking-wider text-[10px]">
+                        {f.label}
+                      </span>
+                      <span className="text-gray-800 font-light mt-0.5 block">{f.value}</span>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </div>
+
+              {/* Signature Highlights */}
+              <div>
+                <h3 className="text-xs font-semibold uppercase tracking-[0.25em] text-[#c89d28] mb-3">
+                  Signature Highlights
+                </h3>
+                <div className="space-y-2">
+                  {activeIdea.highlights.map((h, hIdx) => (
+                    <div key={hIdx} className="flex items-start gap-2.5 text-xs sm:text-sm text-gray-700 font-light">
+                      <CheckCircle2 className="w-4 h-4 text-[#c89d28] shrink-0 mt-0.5" />
+                      <span>{h}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Architectural Design Tip */}
+              <div className="p-5 rounded-2xl bg-[#c89d28]/10 border border-[#c89d28]/20 flex items-start gap-3.5">
+                <Lightbulb className="w-5 h-5 text-[#c89d28] shrink-0 mt-0.5" />
+                <div>
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-[#0c121e] mb-1">
+                    Studio Architectural Advice
+                  </h4>
+                  <p className="text-xs sm:text-sm text-gray-700 font-light leading-relaxed">
+                    {activeIdea.architecturalTip}
+                  </p>
+                </div>
+              </div>
+
+              {/* Modal CTAs */}
+              <div className="pt-6 border-t border-black/5 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <Link
+                  href={`/contact?inspiration=${encodeURIComponent(activeIdea.title)}`}
+                  className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#0c121e] hover:bg-black text-[#faf8f5] text-center font-semibold text-xs tracking-widest uppercase transition-all"
+                >
+                  Commission This Space
+                </Link>
+                <a
+                  href="tel:+917004465611"
+                  className="w-full sm:w-auto px-8 py-4 rounded-full border border-black/20 hover:border-black/40 text-[#0c121e] text-center font-semibold text-xs tracking-widest uppercase transition-all flex items-center justify-center gap-2"
+                >
+                  <PhoneCall className="w-4 h-4 text-[#c89d28]" />
+                  Call Studio: +91 70044 65611
+                </a>
+              </div>
             </div>
           </div>
-        </section>
+        </div>
       )}
 
-      {/* CALL TO ACTION */}
-      <section className="bg-brand-yellow py-24 text-center">
-        <div className="max-w-3xl mx-auto px-6">
-          <h2 className="text-4xl md:text-5xl font-black text-brand-navy mb-6">
-            Inspired by what you see?
-          </h2>
-          <p className="text-brand-navy/80 text-lg font-medium mb-10">
-            Let&apos;s start drafting the blueprint for your dream space today.
+      {/* 5. BOTTOM CTA */}
+      <section className="py-24 bg-[#0c121e] text-[#faf8f5] px-6 text-center relative overflow-hidden">
+        <div className="max-w-4xl mx-auto relative z-10">
+          <p className="text-xs font-semibold tracking-[0.3em] uppercase text-[#c89d28] mb-4">
+            Bespoke Residential Conception
           </p>
-          <button className="bg-brand-navy hover:bg-[#162442] text-white px-12 py-5 rounded-full font-black text-sm tracking-widest uppercase shadow-2xl transition-transform hover:scale-105 cursor-target">
-            Book a Consultation
-          </button>
+          <h2 className="font-serif text-3xl sm:text-5xl font-normal mb-8 leading-tight">
+            Inspired to Transform <br />
+            <span className="italic text-[#c89d28]">Your Living Space?</span>
+          </h2>
+          <p className="text-gray-300 text-base sm:text-lg font-light max-w-2xl mx-auto mb-10 leading-relaxed">
+            Schedule a personalized moodboarding session with our interior design directors. We review your floor plans and tailor material boards specifically for your residence.
+          </p>
+
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+            <Link
+              href="/contact"
+              className="w-full sm:w-auto bg-[#c89d28] hover:bg-[#b58b20] text-[#0c121e] px-10 py-4 rounded-full font-semibold text-xs tracking-widest uppercase shadow-xl transition-all"
+            >
+              Book Design Consultation
+            </Link>
+            <a
+              href="tel:+917004465611"
+              className="w-full sm:w-auto border border-white/20 hover:border-white/40 text-[#faf8f5] px-10 py-4 rounded-full font-semibold text-xs tracking-widest uppercase transition-all bg-white/5"
+            >
+              <PhoneCall className="w-4 h-4 inline mr-2 text-[#c89d28]" />
+              Helpline: +91 70044 65611
+            </a>
+          </div>
         </div>
       </section>
-
     </main>
   );
 }

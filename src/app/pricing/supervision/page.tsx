@@ -1,121 +1,246 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { Users, CheckCircle2, ChevronRight, Activity, Clock, ShieldCheck } from 'lucide-react';
-import { doc, getDoc } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import React from "react";
+import Link from "next/link";
+import {
+  Users,
+  CheckCircle2,
+  ChevronRight,
+  Activity,
+  Clock,
+  ShieldCheck,
+  Sparkles,
+  PhoneCall,
+  HardHat,
+  FileCheck,
+  Check,
+  Building,
+  Ruler
+} from "lucide-react";
+
+const SUPERVISION_TIERS = [
+  {
+    name: "Milestone Audit & Structural Testing",
+    rate: "₹15,000",
+    unit: "per key milestone inspection",
+    desc: "Targeted critical-stage engineering vetting for plot owners employing their own local labor contractors.",
+    features: [
+      "Soil bearing capacity & footing depth verification",
+      "Rebar diameter, spacing & lap length checking before slab casting",
+      "On-site concrete slump test & cube casting for 7/28-day lab crushing",
+      "Plinth, Ground Slab & First Floor Slab Pour sign-offs",
+      "Written structural defect notice & rectification checklist"
+    ],
+    recommended: false
+  },
+  {
+    name: "Resident Quality Assurance (QA) Oversight",
+    rate: "₹28,000",
+    unit: "per month (3 site visits / week)",
+    desc: "Rigorous ongoing oversight monitoring material quality, wastage prevention, and contractor compliance.",
+    features: [
+      "3 Comprehensive on-site engineering visits weekly",
+      "Digital daily photo register & WhatsApp status updates",
+      "Verification of cement grades, sand cleanliness & steel mill certs",
+      "Sunken slab & terrace crystalline waterproofing audits",
+      "Contractor bill verification against actual millimeter site measurements",
+      "Direct phone escalation line with Principal Structural Consultant"
+    ],
+    recommended: true
+  },
+  {
+    name: "Full-Time Resident Civil Engineer",
+    rate: "₹48,000",
+    unit: "per month (Daily 8-hour on-site presence)",
+    desc: "A dedicated B.Tech Civil Engineer stationed permanently on your site from foundation groundbreaking to key handover.",
+    features: [
+      "Full-time 8-hour resident civil engineer on site every working day",
+      "Real-time enforcement of CAD architectural drawings & bar bending schedules",
+      "100% Zero-compromise quality assurance on all masonry, MEP & plastering",
+      "Daily digital labor log, material stock register, and CCTV coordination",
+      "Comprehensive 120-point pre-handover architectural punchlist audit",
+      "Included complimentary with all Galaxy Interior Turnkey Build Contracts"
+    ],
+    recommended: false
+  }
+];
+
+const CHECKLIST_ITEMS = [
+  {
+    title: "1. Soil & Footing Depth Validation",
+    desc: "Validating soil strata firmness and footing depths against structural blueprints before concrete blinding."
+  },
+  {
+    title: "2. Rebar Spacing & Cover Block Audit",
+    desc: "Checking rebar overlaps, stirrup spacing, hook angles (135°), and 25mm/40mm cover block placement."
+  },
+  {
+    title: "3. Concrete Slump & Cube Crush Testing",
+    desc: "Conducting standard slump cone tests on every batch and casting 150mm cubes for 7-day and 28-day NABL testing."
+  },
+  {
+    title: "4. Masonry Alignment & Curing Registry",
+    desc: "Ensuring 1:4 mortar ratio, true vertical plumb line alignment, and mandatory 14-day water pond curing."
+  },
+  {
+    title: "5. Concealed MEP Hydrotesting",
+    desc: "Testing concealed plumbing loops at 10-bar hydraulic pressure for 24 hours to guarantee zero post-handover leaks."
+  },
+  {
+    title: "6. Bill Verification & Quantity Surveying",
+    desc: "Auditing local contractor invoices against exact laser-measured quantities, preventing fraudulent material claims."
+  }
+];
 
 export default function SupervisionPackagesPage() {
-  const [content, setContent] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchContent = async () => {
-      try {
-        const docRef = doc(db, 'pageContent', 'supervision');
-        const snap = await getDoc(docRef);
-        if (snap.exists()) {
-          setContent(snap.data());
-        }
-      } catch (err) {
-        console.error("Error fetching supervision content:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchContent();
-  }, []);
-
-  if (loading) {
-    return <div className="min-h-screen bg-gray-50 flex items-center justify-center">Loading...</div>;
-  }
-
-  const displayContent = content || {
-    heroTitle: 'Site Supervision Support',
-    heroSubtitle: 'Expert Oversight',
-    heroDescription: 'Ensure your project is executed exactly to specification. Our site supervision packages give you expert engineers and project managers on-site to monitor quality, timeline, and budget.',
-    cards: [
-      { title: 'Quality Control', description: 'Strict adherence to approved materials and design blueprints.' },
-      { title: 'Timeline Management', description: 'Daily progress tracking to ensure the project stays on schedule.' },
-      { title: 'Cost Optimization', description: 'Preventing material wastage and unauthorized deviations.' }
-    ],
-    processSteps: [
-      'Initial site assessment and measurement validation',
-      'Daily/Weekly on-site engineer visits',
-      'Detailed progress reports with photographs',
-      'Coordination with third-party contractors',
-      'Bill verification against actual measurements',
-      'Final quality check and handover certification'
-    ]
-  };
-
   return (
-    <main className="bg-gray-50 min-h-screen pb-20 pt-24">
-      {/* Header */}
-      <div className="bg-[#0b162c] text-white pt-16 pb-24 px-6 relative overflow-hidden" style={{ backgroundImage: 'radial-gradient(circle at center, #1c2c4d 2px, transparent 2px)', backgroundSize: '32px 32px' }}>
-        <div className="max-w-4xl mx-auto text-center relative z-10">
-          <div className="inline-block bg-brand-yellow text-brand-navy font-black tracking-widest text-[10px] md:text-[11px] uppercase px-5 py-1.5 rounded-full mb-8">
-            {displayContent.heroSubtitle}
+    <main className="bg-[#faf8f5] text-[#0c121e] min-h-screen pb-24 pt-28">
+      {/* 1. HERO SECTION */}
+      <section className="bg-[#0c121e] text-[#faf8f5] pt-16 pb-20 px-6 rounded-b-[3rem] relative overflow-hidden mb-12">
+        <div className="max-w-5xl mx-auto text-center relative z-10">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#faf8f5]/10 border border-[#c89d28]/30 backdrop-blur-md mb-6">
+            <Sparkles className="w-3.5 h-3.5 text-[#c89d28]" />
+            <span className="text-[11px] font-semibold tracking-[0.25em] uppercase text-[#c89d28]">
+              Independent Engineering Oversight
+            </span>
           </div>
-          <h1 className="text-4xl md:text-6xl font-black mb-6 leading-[1.1] tracking-tight">
-            {displayContent.heroTitle.split(' ').map((word: string, i: number, arr: string[]) => 
-              i === arr.length - 1 ? <span key={i} className="text-brand-yellow italic">{word}</span> : word + ' '
-            )}
+
+          <h1 className="font-serif text-4xl sm:text-6xl md:text-7xl font-normal tracking-tight leading-[1.1] mb-6">
+            Resident Engineering &amp; <br />
+            <span className="italic font-light text-[#c89d28]">Quality Supervision</span>
           </h1>
-          <p className="text-gray-300 font-medium text-sm md:text-[15px] max-w-3xl mx-auto leading-relaxed">
-            {displayContent.heroDescription}
+
+          <p className="text-gray-300 font-light text-base sm:text-lg max-w-3xl mx-auto leading-relaxed mb-10">
+            Even if you are building with your own contractor, protect your life savings. Station certified Galaxy Interior civil engineers on your site to audit materials, verify rebar cages, and prevent costly construction errors.
           </p>
-        </div>
-      </div>
 
-      {/* Content */}
-      <div className="max-w-6xl mx-auto px-6 -mt-10 relative z-20">
-        <div className="bg-white rounded-3xl p-8 md:p-12 shadow-xl border border-gray-100">
-          
-          <div className="grid md:grid-cols-3 gap-8 mb-12">
-            <div className="bg-gray-50 rounded-2xl p-6 border border-gray-100 flex flex-col items-center text-center">
-              <ShieldCheck size={36} className="text-brand-yellow mb-4" />
-              <h3 className="font-bold text-brand-navy text-lg mb-2">{displayContent.cards[0]?.title}</h3>
-              <p className="text-sm text-gray-600">{displayContent.cards[0]?.description}</p>
-            </div>
-            <div className="bg-gray-50 rounded-2xl p-6 border border-gray-100 flex flex-col items-center text-center">
-              <Clock size={36} className="text-brand-yellow mb-4" />
-              <h3 className="font-bold text-brand-navy text-lg mb-2">{displayContent.cards[1]?.title}</h3>
-              <p className="text-sm text-gray-600">{displayContent.cards[1]?.description}</p>
-            </div>
-            <div className="bg-gray-50 rounded-2xl p-6 border border-gray-100 flex flex-col items-center text-center">
-              <Activity size={36} className="text-brand-yellow mb-4" />
-              <h3 className="font-bold text-brand-navy text-lg mb-2">{displayContent.cards[2]?.title}</h3>
-              <p className="text-sm text-gray-600">{displayContent.cards[2]?.description}</p>
-            </div>
+          <div className="flex flex-wrap items-center justify-center gap-4">
+            <Link
+              href="/contact?service=supervision"
+              className="px-8 py-4 rounded-full bg-[#c89d28] hover:bg-[#b58b20] text-[#0c121e] font-semibold text-xs tracking-widest uppercase transition-all shadow-lg shadow-[#c89d28]/20 flex items-center gap-2"
+            >
+              Book Site Feasibility Audit
+            </Link>
+            <a
+              href="tel:+917004465611"
+              className="px-8 py-4 rounded-full border border-white/20 hover:border-white/40 text-[#faf8f5] font-semibold text-xs tracking-widest uppercase transition-all bg-white/5"
+            >
+              <PhoneCall className="w-4 h-4 inline mr-2 text-[#c89d28]" />
+              Helpline: +91 70044 65611
+            </a>
           </div>
+        </div>
+      </section>
 
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-3xl font-black text-brand-navy mb-6">Our Supervision Process</h2>
-              <ul className="space-y-4">
-                {displayContent.processSteps.map((item: string, idx: number) => (
-                  <li key={idx} className="flex items-start gap-3">
-                    <CheckCircle2 className="text-brand-yellow shrink-0 mt-0.5" size={20} />
-                    <span className="text-gray-700 font-medium">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="bg-brand-navy/5 rounded-2xl p-8 border border-brand-navy/10 flex flex-col justify-center items-center text-center h-full">
-              <Users size={48} className="text-brand-yellow mb-6" />
-              <h3 className="text-2xl font-bold text-brand-navy mb-4">Calculate Supervision Cost</h3>
-              <p className="text-gray-600 mb-8">
-                Want to know how much our supervision packages cost? Add it as a requirement in our calculator.
-              </p>
-              <Link href="/pricing" className="bg-brand-navy text-white px-8 py-4 rounded-xl font-bold hover:bg-gray-900 transition-colors flex items-center gap-2">
-                Launch Calculator <ChevronRight size={18} />
+      {/* 2. SUPERVISION PACKAGES CARDS */}
+      <section className="max-w-7xl mx-auto px-6 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {SUPERVISION_TIERS.map((tier, idx) => (
+            <div
+              key={idx}
+              className={`rounded-3xl p-8 sm:p-10 flex flex-col justify-between transition-all ${
+                tier.recommended
+                  ? "bg-[#0c121e] text-[#faf8f5] shadow-2xl ring-2 ring-[#c89d28] relative"
+                  : "bg-white text-[#0c121e] border border-black/5 shadow-sm"
+              }`}
+            >
+              {tier.recommended && (
+                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-[#c89d28] text-[#0c121e] text-[9px] font-bold tracking-widest uppercase">
+                  Most Chosen Plan
+                </div>
+              )}
+
+              <div>
+                <h3 className="font-serif text-2xl mb-2">{tier.name}</h3>
+                <p className={`text-xs mb-6 ${tier.recommended ? "text-gray-400" : "text-gray-500"}`}>
+                  {tier.desc}
+                </p>
+
+                <div className="mb-6 pb-6 border-b border-black/10 dark:border-white/10">
+                  <span className="font-serif text-4xl text-[#c89d28]">{tier.rate}</span>
+                  <span className={`text-xs block mt-1 ${tier.recommended ? "text-gray-400" : "text-gray-500"}`}>
+                    {tier.unit}
+                  </span>
+                </div>
+
+                <ul className="space-y-3 mb-8">
+                  {tier.features.map((feat, fIdx) => (
+                    <li key={fIdx} className="flex items-start gap-2.5 text-xs sm:text-sm font-light">
+                      <Check className="w-4 h-4 text-[#c89d28] shrink-0 mt-0.5" />
+                      <span>{feat}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <Link
+                href={`/contact?supervision=${encodeURIComponent(tier.name)}`}
+                className={`w-full py-4 rounded-full text-center text-xs font-semibold tracking-widest uppercase transition-all ${
+                  tier.recommended
+                    ? "bg-[#c89d28] hover:bg-[#b58b20] text-[#0c121e]"
+                    : "bg-[#0c121e] hover:bg-black text-[#faf8f5]"
+                }`}
+              >
+                Retain Engineer
               </Link>
             </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 3. 30-POINT ENGINEERING AUDIT CHECKLIST */}
+      <section className="max-w-7xl mx-auto px-6 mb-20">
+        <div className="bg-white rounded-3xl p-8 sm:p-12 border border-black/5 shadow-sm">
+          <div className="max-w-3xl mb-10">
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#c89d28] mb-2">
+              Systematic Protocol
+            </p>
+            <h2 className="font-serif text-3xl sm:text-4xl text-[#0c121e]">
+              Core Inspection Checkpoints
+            </h2>
+            <p className="text-gray-500 font-light text-sm mt-2">
+              Every on-site visit follows our 30-point civil inspection checklist. Defects are photographed and halted before concrete is poured.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {CHECKLIST_ITEMS.map((item, index) => (
+              <div key={index} className="p-6 rounded-2xl bg-[#faf8f5] border border-black/5">
+                <FileCheck className="w-6 h-6 text-[#c89d28] mb-3" />
+                <h4 className="font-serif text-lg text-[#0c121e] font-medium mb-1.5">{item.title}</h4>
+                <p className="text-gray-600 text-xs font-light leading-relaxed">{item.desc}</p>
+              </div>
+            ))}
           </div>
         </div>
-      </div>
+      </section>
+
+      {/* 4. CONVERSION CTA */}
+      <section className="max-w-7xl mx-auto px-6">
+        <div className="bg-[#0c121e] text-[#faf8f5] rounded-3xl p-10 sm:p-14 text-center relative overflow-hidden">
+          <h2 className="font-serif text-3xl sm:text-5xl font-normal mb-4">
+            Protect Your Lifetime Investment
+          </h2>
+          <p className="text-gray-300 font-light text-sm sm:text-base max-w-2xl mx-auto mb-8 leading-relaxed">
+            A single unnoticed column honeycomb or improper rebar lap can compromise the structural safety of your family residence. Speak with our principal structural team today.
+          </p>
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+            <Link
+              href="/contact?service=supervision"
+              className="px-10 py-4 rounded-full bg-[#c89d28] hover:bg-[#b58b20] text-[#0c121e] font-semibold text-xs tracking-widest uppercase transition-all shadow-lg"
+            >
+              Book Site Assessment
+            </Link>
+            <a
+              href="tel:+917004465611"
+              className="px-8 py-4 rounded-full border border-white/20 hover:border-white/40 text-[#faf8f5] font-semibold text-xs tracking-widest uppercase transition-all bg-white/5"
+            >
+              <PhoneCall className="w-4 h-4 inline mr-2 text-[#c89d28]" />
+              Engineering Desk: +91 70044 65611
+            </a>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }

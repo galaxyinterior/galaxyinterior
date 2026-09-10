@@ -1,21 +1,25 @@
 "use client";
 
-import React, { useState } from 'react';
-import Image from 'next/image';
-import { 
-  Wrench, 
-  PaintRoller, 
-  Home, 
-  Trash2, 
-  RefreshCcw, 
-  CheckCircle2, 
-  ChevronDown, 
+import React, { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import {
+  Wrench,
+  PaintRoller,
+  Home,
+  Trash2,
+  RefreshCcw,
+  CheckCircle2,
+  ChevronDown,
+  ArrowRight,
+  Shield,
+  PhoneCall,
   Sparkles,
-  HeartHandshake,
-  Clock,
-  ThumbsUp,
-  Droplets
-} from 'lucide-react';
+  Droplets,
+  Layers,
+  Building,
+  Check
+} from "lucide-react";
 
 // ==========================================
 // DATA STRUCTURES
@@ -24,116 +28,122 @@ import {
 const PROCESS_STEPS = [
   {
     step: "01",
-    title: "Structural Assessment",
-    desc: "Before swinging a sledgehammer, our engineers assess the load-bearing walls, existing plumbing, and electrical lines to determine what can safely be altered.",
-    icon: <Home size={32} />
+    title: "Structural Assessment & Rebound Hammer Test",
+    desc: "Non-destructive testing of existing RCC columns, load-bearing brickwork, and moisture scanning to determine feasibility.",
+    icon: <Home className="text-[#c89d28]" size={26} />
   },
   {
     step: "02",
-    title: "Design & Remodeling Plan",
-    desc: "We draft a new floor plan and 3D renders that merge your existing structure with modern aesthetics and improved spatial utility.",
-    icon: <RefreshCcw size={32} />
+    title: "Reimagined Spatial Layout & 3D Renders",
+    desc: "Opening cramped spaces, knocking down non-structural walls, and generating 4K 3D renders of the modern transformed layout.",
+    icon: <RefreshCcw className="text-[#c89d28]" size={26} />
   },
   {
     step: "03",
-    title: "Safe Demolition & Disposal",
-    desc: "We meticulously tear down walls, rip out old flooring, and safely dispose of all debris without damaging the integrity of the remaining structure.",
-    icon: <Trash2 size={32} />
+    title: "Barricaded Demolition & Safe Debris Removal",
+    desc: "Meticulous dust-barricaded demolition of old tiles, outdated plumbing, and partitions with responsible municipal waste disposal.",
+    icon: <Trash2 className="text-[#c89d28]" size={26} />
   },
   {
     step: "04",
-    title: "Upgrading MEP Systems",
-    desc: "Old houses have old pipes and wires. We completely rip out and replace outdated plumbing and electricals to meet modern safety and load standards.",
-    icon: <Wrench size={32} />
+    title: "Chemical DPC & Anti-Damp Rehabilitation",
+    desc: "Pressure grouting, damp-proof course (DPC) chemical injection, and crystalline waterproofing to eliminate persistent wall seepage forever.",
+    icon: <Droplets className="text-[#c89d28]" size={26} />
   },
   {
     step: "05",
-    title: "Rebuilding & Plastering",
-    desc: "New walls go up, fresh plaster is applied, and the canvas is prepared. We focus heavily on waterproofing during this stage, especially for older homes.",
-    icon: <PaintRoller size={32} />
+    title: "Complete MEP Rewiring & Modern Plumbing",
+    desc: "Ripping out corroded GI pipes and vintage wiring; installing concealed CPVC/UPVC piping and FRLS fire-retardant copper circuits.",
+    icon: <Wrench className="text-[#c89d28]" size={26} />
   },
   {
     step: "06",
-    title: "Finishes & Handover",
-    desc: "The final layer of polish. Tiles, paint, lighting, and custom millwork are installed. The old house is now a brand-new home.",
-    icon: <Sparkles size={32} />
+    title: "New Finishes, Custom Joinery & Reveal",
+    desc: "Laying Italian tiles, fresh false ceilings, custom modular woodwork, Asian Paints Royale coat, and final immaculate handover.",
+    icon: <Sparkles className="text-[#c89d28]" size={26} />
   }
 ];
 
-const FEATURES = [
+const RENOVATION_PILLARS = [
   {
-    title: "Zero Damage Guarantee",
-    desc: "Our demolition is surgical. We ensure that shared walls (in apartments) or structural columns are never compromised during the teardown.",
-    icon: <HeartHandshake className="text-brand-yellow" size={24} />
+    title: "Structural Integrity First",
+    desc: "We never touch a column or beam without calculating load redistribution. Every wall removal is backed by certified civil engineering.",
+    icon: <Building className="text-[#c89d28]" size={22} />
   },
   {
-    title: "Modern Waterproofing",
-    desc: "Old homes suffer from seepage. We use advanced chemical waterproofing (like Dr. Fixit PIDIFIN) to ensure your renovated walls stay dry forever.",
-    icon: <Droplets className="text-brand-yellow" size={24} />
+    title: "Permanent Damp & Seepage Cure",
+    desc: "Our structural rehabilitation uses polymer-modified crystalline barrier coats and pressure grouting that solves capillary water rise permanently.",
+    icon: <Droplets className="text-[#c89d28]" size={22} />
   },
   {
-    title: "Preserving Heritage",
-    desc: "If your home has vintage elements (like antique arches or Burma teak beams), we integrate them beautifully into the new modern design rather than destroying them.",
-    icon: <Home className="text-brand-yellow" size={24} />
+    title: "Complete MEP Modernization",
+    desc: "Eliminates circuit overloads and hidden pipe corrosion. We replace all concealed wiring and plumbing to handle modern HVAC and appliance loads.",
+    icon: <Wrench className="text-[#c89d28]" size={22} />
   },
   {
-    title: "Fast-Track Execution",
-    desc: "We know renovations disrupt your life. We deploy extra manpower and work on strict timelines to get you back into your home as fast as possible.",
-    icon: <Clock className="text-brand-yellow" size={24} />
+    title: "Dust-Controlled Phased Execution",
+    desc: "If you are residing on a different floor or wing during renovation, we erect airtight dust barriers and maintain strict daily cleanups.",
+    icon: <Layers className="text-[#c89d28]" size={22} />
   },
   {
-    title: "Smart Replanning",
-    desc: "We don't just paint walls. We knock down unnecessary partitions to create open-plan living spaces that completely change the feel of a 20-year-old home.",
-    icon: <RefreshCcw className="text-brand-yellow" size={24} />
+    title: "Modern Facelift & Energy Upgrades",
+    desc: "Upgrade old single-glazed wood windows to airtight double-glazed UPVC / thermal-break aluminum fenestration for acoustic tranquility.",
+    icon: <PaintRoller className="text-[#c89d28]" size={22} />
   },
   {
-    title: "Complete Cleanup",
-    desc: "Post-renovation, we don't leave you with a dusty mess. We do a massive deep clean so you walk into a spotless, fresh-smelling home.",
-    icon: <ThumbsUp className="text-brand-yellow" size={24} />
+    title: "5-Year Seepage & Craft Warranty",
+    desc: "Every renovated space is protected by a 5-year written guarantee covering waterproofing, plumbing joints, and false ceiling integrity.",
+    icon: <Shield className="text-[#c89d28]" size={22} />
   }
 ];
 
-const PRICING_TIERS = [
+const RENOVATION_PACKAGES = [
   {
-    name: "Surface Refresh",
-    price: "₹600",
-    unit: "per sq.ft",
-    desc: "A quick facelift. Perfect for properties that need to be rented out or sold quickly.",
+    name: "Cosmetic Modernization & Refresh",
+    price: "₹450",
+    unit: "per sq.ft built-up",
+    desc: "Ideal for modernizing finishes, fresh paints, flooring overlays, and bathroom upgrades without structural demolition.",
     features: [
-      "Complete Repainting",
-      "Minor Woodwork Polish",
-      "Basic Electrical Repair",
-      "Deep Cleaning & Grout Fixing",
-      "No Demolition Involved"
+      "Tile-on-Tile Vitrified Flooring / Anti-Skid Overlays",
+      "Asian Paints Royale Luxury Emulsion on All Walls",
+      "Sanitary Fixture Upgrades (Kohler / Jaguar Fittings)",
+      "Switchplate & Lighting Modernization (Schneider / Legrand)",
+      "Gyproc False Ceiling Addition in Living & Master Suite",
+      "Deep Door & Window Woodwork Re-Polishing",
+      "Comprehensive Post-Renovation Chemical Cleaning"
     ],
     recommended: false
   },
   {
-    name: "Deep Remodel",
-    price: "₹1,200",
-    unit: "per sq.ft",
-    desc: "Our most requested package. Modernizes older homes with new layouts and finishes.",
+    name: "Complete Structural & Interior Overhaul",
+    price: "₹850",
+    unit: "per sq.ft built-up",
+    desc: "Our most popular renovation tier. Complete plumbing, electrical, damp-proofing, and modular joinery revamp.",
     features: [
-      "Everything in Surface Refresh",
-      "Bathroom & Kitchen Teardown",
-      "New Plumbing & Electricals",
-      "New Flooring & Tiles",
-      "Custom Modular Kitchen"
+      "Removal of Non-Load-Bearing Partitions for Open Plan",
+      "Complete Stripping & Re-Laying of Concealed MEP Lines",
+      "Deep Chemical DPC Pressure Grouting for Damp Elimination",
+      "Brand New Designer Bathrooms with Concealed Diverters",
+      "Custom Modular Kitchen with Acrylic/Veneer Shutters",
+      "New 4x2 Vitrified Glazed Tiles / Wooden Laminate Flooring",
+      "Full Interior Painting with Water-Based Putty Primer",
+      "5-Year Waterproofing & Workmanship Warranty"
     ],
     recommended: true
   },
   {
-    name: "Structural Overhaul",
-    price: "₹2,000+",
-    unit: "per sq.ft",
-    desc: "Tearing the house down to its bones and rebuilding it as a modern masterpiece.",
+    name: "Heritage Manor & Facade Reimagining",
+    price: "₹1,350",
+    unit: "per sq.ft built-up",
+    desc: "Comprehensive structural restoration, exterior elevation remodeling, and luxury turnkey interior transformation.",
     features: [
-      "Everything in Deep Remodel",
-      "Wall Demolition & Layout Change",
-      "Advanced Waterproofing",
-      "New Premium Windows/Doors",
-      "Smart Home Wiring & Setup",
-      "Premium Interior Styling"
+      "Everything in Complete Overhaul Tier",
+      "Exterior Facade Facelift (Stone Cladding & Texture Plaster)",
+      "Double-Glazed Soundproof UPVC / Aluminum Fenestration",
+      "Italian Statuario / Bottochino Marble Flooring Restoration",
+      "Terrace Waterproofing with Heat-Reflective Thermal Screed",
+      "Smart Electrical DB Panel with Individual RCBO Protection",
+      "Architectural Boundary Wall & Gate Modernization"
     ],
     recommended: false
   }
@@ -141,375 +151,395 @@ const PRICING_TIERS = [
 
 const FAQS = [
   {
-    q: "Can I live in the house while you renovate?",
-    a: "If it's a minor surface refresh, yes. However, for a deep remodel involving civil work, plumbing, and flooring, we strongly advise moving out temporarily due to dust, noise, and safety hazards."
+    q: "Can you remove internal walls to create a modern open-concept living area?",
+    a: "Yes. Our senior structural engineers inspect the existing building blueprints and perform rebound tests on-site. Non-load-bearing partition walls can be safely removed, and load-bearing spans can be supported with concealed steel I-beams (RSJ) to create expansive open-plan living and dining spaces."
   },
   {
-    q: "How do you handle debris from the demolition?",
-    a: "We bring our own trucks and labor to cart away all debris safely. We dispose of it in municipal-approved dumping grounds and never clutter your society premises."
+    q: "How does Galaxy Interior treat persistent wall dampness and efflorescence (shora)?",
+    a: "We do not simply apply superficial putty over damp walls. We chip the plaster down to the bare brickwork, inject polymer-modified waterproofing chemicals into the base masonry to create an artificial damp-proof course (DPC), apply crystalline barrier slurry, and replaster with waterproof additive mortar."
   },
   {
-    q: "My apartment is very old, is it safe to knock down walls?",
-    a: "We never touch a wall until our structural engineer has evaluated the building's blueprints. We only remove non-load-bearing partition walls to open up the space."
+    q: "Do we need to vacate the property during renovation?",
+    a: "For comprehensive structural and MEP overhauls, vacating the property for 30 to 45 days is recommended for safety and speed. For cosmetic refreshes or single-floor renovations, we create heavy-duty airtight dust barricades and execute in coordinated phases so you can continue residing comfortably."
   },
   {
-    q: "Do you renovate bathrooms and kitchens only?",
-    a: "Yes. Bathrooms and kitchens are the most common renovation requests. We offer specialized packages to rip out and rebuild these highly functional spaces in just 2-3 weeks."
+    q: "Will you upgrade our old electrical wiring to support multiple air conditioners?",
+    a: "Yes. We replace outdated aluminium or thin gauge wires with heavy copper fire-retardant (FRLS) wires, install dedicated 16A/25A AC circuits, and install a modern Miniature Circuit Breaker (MCB) and Residual Current Breaker with Overcurrent (RCBO) distribution board."
   },
   {
-    q: "What if there is existing water leakage from the upper floor?",
-    a: "We address the root cause first. We coordinate with your neighbors or the society to fix the external leakage, apply robust internal waterproofing, and then proceed with the renovation."
-  },
-  {
-    q: "Can you reuse my old doors and windows?",
-    a: "Yes! If the wood is of good quality (like old Teak or Sal), we highly recommend refurbishing, polishing, and reusing them. It saves money and adds character."
-  },
-  {
-    q: "How accurate is the renovation estimate?",
-    a: "Renovations can sometimes reveal hidden issues (like rusted pipes behind walls). We provide a 90% accurate estimate, but we always advise clients to keep a 10% contingency budget for unforeseen structural surprises."
+    q: "What is the typical timeframe for a full home renovation?",
+    a: "A cosmetic refresh requires 15 to 25 working days. A complete structural, MEP, and interior overhaul of a 2,500 sq.ft home typically requires 40 to 60 calendar days."
   }
 ];
 
-const GALLERY_IMAGES = [
-  "/services/service_renovation_1787300085173.jpg",
-  "https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&q=80&w=1200",
-  "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&q=80&w=1200",
-  "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&q=80&w=1200",
-  "https://images.unsplash.com/photo-1599619351208-6e6a20028742?auto=format&fit=crop&q=80&w=1200",
-  "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=1200"
+const GALLERY_ITEMS = [
+  {
+    src: "/services/service_renovation_1787300085173.jpg",
+    title: "Old Residence Transformed to Modern Villa",
+    category: "Structural Facelift"
+  },
+  {
+    src: "/generated/interior_gallery_2.png",
+    title: "Cramped Master Bedroom Reimagined",
+    category: "Interior Modernization"
+  },
+  {
+    src: "/generated/fac_tiles_flooring.png",
+    title: "Precision Tile Laying & Expansion Joints",
+    category: "Flooring Upgrades"
+  },
+  {
+    src: "/generated/fac_wall_panelling.png",
+    title: "Damp-Treated Acoustic Wall Paneling",
+    category: "Wall Rehabilitation"
+  },
+  {
+    src: "/generated/inspiration_italian_tiles.jpg",
+    title: "Restored Italian Marble & Custom Vanity",
+    category: "Bath Remodeling"
+  },
+  {
+    src: "/generated/fac_wooden_work.png",
+    title: "Custom Modern Wardrobe Installation",
+    category: "Millwork Overhaul"
+  }
 ];
-
-// ==========================================
-// COMPONENT
-// ==========================================
 
 export default function RenovationProjectPage() {
   const [activeFaq, setActiveFaq] = useState<number | null>(0);
 
   return (
-    <main className="bg-white">
-
+    <main className="bg-[#faf8f5] text-[#0c121e] min-h-screen">
       {/* 1. HERO SECTION */}
-      <section className="relative w-full h-[80vh] min-h-[600px] flex items-center justify-center overflow-hidden">
+      <section className="relative w-full min-h-[75vh] flex items-center justify-center overflow-hidden pt-28 pb-20 bg-[#0c121e]">
         <div className="absolute inset-0 z-0">
-          <Image 
-            src="/services/service_renovation_1787300085173.jpg" 
-            alt="Renovation Projects" 
+          <Image
+            src="/services/service_renovation_1787300085173.jpg"
+            alt="Galaxy Interior Structural Modernization & Home Renovation"
             fill
             priority
-            className="object-cover animate-ken-burns"
+            className="object-cover opacity-35"
             sizes="100vw"
           />
-          <div className="absolute inset-0 bg-brand-navy/70 mix-blend-multiply"></div>
-          <div className="absolute inset-0 bg-gradient-to-t from-brand-navy via-transparent to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0c121e] via-[#0c121e]/80 to-transparent" />
         </div>
 
-        <div className="relative z-10 text-center max-w-5xl mx-auto px-6 mt-16">
-          <div className="inline-block px-6 py-2 border border-brand-yellow/50 rounded-full mb-6 backdrop-blur-sm bg-black/20">
-            <span className="text-brand-yellow font-bold tracking-widest uppercase text-xs">Service Overview</span>
+        <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#faf8f5]/10 border border-[#c89d28]/30 backdrop-blur-md mb-6">
+            <Sparkles className="w-3.5 h-3.5 text-[#c89d28]" />
+            <span className="text-[11px] font-semibold tracking-[0.25em] uppercase text-[#c89d28]">
+              Discipline 05 &bull; Structural Modernization &amp; Upgrades
+            </span>
           </div>
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white mb-8 leading-tight drop-shadow-2xl">
-            Space <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-yellow to-yellow-200">Renovation</span>
+
+          <h1 className="font-serif text-4xl sm:text-6xl md:text-7xl font-normal text-[#faf8f5] tracking-tight leading-[1.1] mb-6">
+            Structural Modernization &amp; <br />
+            <span className="italic font-light text-[#c89d28]">Home Renovation</span>
           </h1>
-          <p className="text-gray-300 text-lg md:text-2xl font-medium max-w-3xl mx-auto leading-relaxed mb-12">
-            Breathing new life into old spaces. We strip down outdated structures and rebuild them into modern, functional, and stunning environments.
+
+          <p className="text-gray-300 text-base sm:text-xl font-light max-w-3xl mx-auto leading-relaxed mb-10">
+            Breathing new life into aging structures. Non-destructive scanning, open-concept re-planning, permanent damp elimination, and luxury modern interiors.
           </p>
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-6">
-            <button className="bg-brand-yellow hover:bg-yellow-400 text-brand-navy px-10 py-5 rounded-full font-black text-sm tracking-widest uppercase shadow-[0_0_20px_rgba(241,184,33,0.3)] transition-all hover:scale-105 w-full sm:w-auto">
-              Get an Estimate
-            </button>
-            <button className="bg-transparent hover:bg-white/10 text-white border border-white px-10 py-5 rounded-full font-black text-sm tracking-widest uppercase transition-colors w-full sm:w-auto">
-              View Before & Afters
-            </button>
-          </div>
-        </div>
 
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center animate-bounce">
-          <span className="text-white/50 text-xs tracking-widest uppercase font-bold mb-2">Scroll</span>
-          <ChevronDown className="text-brand-yellow" />
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link
+              href="/contact?service=renovation"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-[#c89d28] hover:bg-[#b58b20] text-[#0c121e] font-semibold text-xs tracking-widest uppercase transition-all shadow-lg shadow-[#c89d28]/20"
+            >
+              Book Structural Audit
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+            <a
+              href="tel:+917004465611"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full border border-white/20 hover:border-white/40 text-[#faf8f5] font-semibold text-xs tracking-widest uppercase transition-all bg-white/5 backdrop-blur-sm"
+            >
+              <PhoneCall className="w-4 h-4 text-[#c89d28]" />
+              Helpline +91 70044 65611
+            </a>
+          </div>
+
+          {/* Quick Metrics Bar */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16 pt-10 border-t border-white/10 max-w-4xl mx-auto">
+            <div>
+              <p className="font-serif text-2xl md:text-3xl text-[#faf8f5]">100%</p>
+              <p className="text-xs text-gray-400 uppercase tracking-widest mt-1">Damp Elimination</p>
+            </div>
+            <div>
+              <p className="font-serif text-2xl md:text-3xl text-[#faf8f5]">Zero</p>
+              <p className="text-xs text-gray-400 uppercase tracking-widest mt-1">Structural Compromise</p>
+            </div>
+            <div>
+              <p className="font-serif text-2xl md:text-3xl text-[#faf8f5]">Complete</p>
+              <p className="text-xs text-gray-400 uppercase tracking-widest mt-1">MEP Modernization</p>
+            </div>
+            <div>
+              <p className="font-serif text-2xl md:text-3xl text-[#faf8f5]">5 Years</p>
+              <p className="text-xs text-gray-400 uppercase tracking-widest mt-1">Written Warranty</p>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* 2. EXECUTIVE OVERVIEW */}
-      <section className="py-24 md:py-32 bg-brand-navy relative overflow-hidden">
-        <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full border-[1px] border-white/5"></div>
-        <div className="max-w-[1400px] mx-auto px-6 relative z-10">
-          <div className="flex flex-col lg:flex-row gap-16 items-center">
-            <div className="w-full lg:w-1/2">
-              <h4 className="text-brand-yellow text-sm font-bold tracking-widest uppercase mb-4 flex items-center">
-                <span className="w-12 h-px bg-brand-yellow mr-4"></span>
-                The Transformation
-              </h4>
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-8 leading-tight">
-                Out with the old. <br/>In with the bold.
+      {/* 2. RENOVATION PROCESS */}
+      <section className="py-24 px-6 max-w-7xl mx-auto">
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#c89d28] mb-3">
+            Systematic Transformation
+          </p>
+          <h2 className="font-serif text-3xl sm:text-5xl font-normal text-[#0c121e] tracking-tight">
+            The 6-Step Renovation Workflow
+          </h2>
+          <p className="text-gray-600 font-light mt-4 text-base sm:text-lg">
+            From rebound hammer structural assessment to dust-controlled barricading, MEP stripping, and final bespoke finishes.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {PROCESS_STEPS.map((step, idx) => (
+            <div
+              key={idx}
+              className="bg-white p-8 rounded-2xl border border-black/5 shadow-sm hover:shadow-md transition-all group relative overflow-hidden"
+            >
+              <div className="flex items-center justify-between mb-6">
+                <span className="font-serif text-3xl font-light text-[#c89d28]">
+                  {step.step}
+                </span>
+                <div className="w-12 h-12 rounded-xl bg-[#faf8f5] flex items-center justify-center border border-black/5 group-hover:bg-[#c89d28]/10 transition-colors">
+                  {step.icon}
+                </div>
+              </div>
+              <h3 className="font-serif text-xl font-medium text-[#0c121e] mb-3">
+                {step.title}
+              </h3>
+              <p className="text-gray-600 font-light text-sm leading-relaxed">
+                {step.desc}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 3. RENOVATION PILLARS */}
+      <section className="py-24 bg-[#0c121e] text-[#faf8f5] px-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#c89d28] mb-3">
+                Rigor &amp; Craft
+              </p>
+              <h2 className="font-serif text-3xl sm:text-5xl font-normal tracking-tight">
+                Our Renovation Standards
               </h2>
-              <div className="w-24 h-2 bg-brand-yellow mb-8"></div>
-              <p className="text-gray-400 text-lg leading-relaxed mb-6 font-medium">
-                Renovating an old space is often more complex than building a new one from scratch. You have to work within existing structural constraints, deal with decades-old plumbing, and navigate delicate demolitions.
-              </p>
-              <p className="text-gray-400 text-lg leading-relaxed font-medium mb-10">
-                Our renovation experts love this challenge. Whether it&apos;s a 30-year-old ancestral home that needs modernizing or a newly bought resale apartment that needs your personal touch, we strip it to the bones and resurrect it into something spectacular.
-              </p>
-              
-              <div className="grid grid-cols-2 gap-8 border-t border-white/10 pt-10">
-                <div>
-                  <div className="text-5xl font-black text-brand-yellow mb-2">300+</div>
-                  <div className="text-white text-xs font-bold tracking-widest uppercase">Spaces Revamped</div>
-                </div>
-                <div>
-                  <div className="text-5xl font-black text-brand-yellow mb-2">45</div>
-                  <div className="text-white text-xs font-bold tracking-widest uppercase">Avg. Days to Handover</div>
-                </div>
-              </div>
             </div>
-            
-            <div className="w-full lg:w-1/2 relative">
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl">
-                <Image 
-                  src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&q=80&w=1000" 
-                  alt="Renovation Work" 
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                />
-                <div className="absolute inset-0 bg-brand-navy/20 mix-blend-multiply"></div>
-              </div>
-              
-              <div className="absolute -bottom-10 -left-10 bg-white p-8 rounded-2xl shadow-2xl max-w-[250px] border border-gray-100 hidden md:block">
-                <RefreshCcw className="text-brand-yellow w-12 h-12 mb-4" />
-                <h4 className="text-brand-navy font-black text-xl mb-2">Modern Upgrades</h4>
-                <p className="text-gray-500 text-sm font-medium">We upgrade hidden MEP systems before focusing on aesthetics.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 3. CORE FEATURES GRID */}
-      <section className="py-24 bg-gray-50">
-        <div className="max-w-[1400px] mx-auto px-6">
-          <div className="text-center max-w-3xl mx-auto mb-20">
-            <h4 className="text-brand-navy text-sm font-bold tracking-widest uppercase mb-4">The Renovation Edge</h4>
-            <h2 className="text-4xl md:text-5xl font-black text-brand-navy mb-6">Why Choose Us to Remodel?</h2>
-            <p className="text-gray-600 text-lg font-medium">
-              We handle the dust, the noise, and the heavy lifting, delivering a pristine new home to you in record time.
+            <p className="text-gray-400 font-light max-w-md text-sm sm:text-base">
+              Unlike local contractors who paint over moisture and ignore faulty wiring, we resolve root engineering issues.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {FEATURES.map((feature, index) => (
-              <div key={index} className="bg-white p-10 rounded-2xl shadow-lg border border-gray-100 hover:shadow-2xl transition-shadow group cursor-target">
-                <div className="w-16 h-16 bg-brand-navy rounded-xl flex items-center justify-center mb-8 group-hover:bg-brand-yellow transition-colors">
-                  {feature.icon}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {RENOVATION_PILLARS.map((pil, index) => (
+              <div
+                key={index}
+                className="bg-white/5 border border-white/10 rounded-2xl p-7 hover:border-[#c89d28]/40 transition-colors"
+              >
+                <div className="w-10 h-10 rounded-lg bg-[#c89d28]/10 flex items-center justify-center mb-5">
+                  {pil.icon}
                 </div>
-                <h3 className="text-2xl font-black text-brand-navy mb-4">{feature.title}</h3>
-                <p className="text-gray-600 font-medium leading-relaxed">
-                  {feature.desc}
-                </p>
+                <h3 className="font-serif text-xl text-[#faf8f5] mb-2">{pil.title}</h3>
+                <p className="text-gray-400 text-sm font-light leading-relaxed">{pil.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* 4. METHODOLOGY / PROCESS TIMELINE */}
-      <section className="py-24 bg-white">
-        <div className="max-w-[1400px] mx-auto px-6">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-20">
-            <div className="max-w-2xl">
-              <h4 className="text-brand-yellow text-sm font-bold tracking-widest uppercase mb-4">How We Remodel</h4>
-              <h2 className="text-4xl md:text-5xl font-black text-brand-navy mb-6">Controlled Demolition to Final Polish</h2>
-              <p className="text-gray-600 text-lg font-medium">
-                Our surgical approach to renovation ensures absolute safety for the remaining structure and zero hassle for your neighbors.
-              </p>
-            </div>
+      {/* 4. GALLERY SHOWCASE */}
+      <section className="py-24 px-6 max-w-7xl mx-auto">
+        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#c89d28] mb-3">
+              Transformation Gallery
+            </p>
+            <h2 className="font-serif text-3xl sm:text-5xl font-normal text-[#0c121e]">
+              Before &amp; After Masterpieces
+            </h2>
           </div>
+          <Link
+            href="/projects"
+            className="inline-flex items-center gap-2 text-xs font-semibold tracking-widest uppercase text-[#0c121e] hover:text-[#c89d28] transition-colors"
+          >
+            Explore Projects <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
 
-          <div className="relative">
-            <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-1 bg-gray-100 -translate-x-1/2"></div>
-            
-            <div className="space-y-12 lg:space-y-0 relative">
-              {PROCESS_STEPS.map((step, index) => {
-                const isEven = index % 2 === 0;
-                return (
-                  <div key={index} className={`flex flex-col lg:flex-row items-center w-full ${isEven ? 'lg:flex-row-reverse' : ''} mb-12 lg:mb-24 relative`}>
-                    <div className={`w-full lg:w-1/2 ${isEven ? 'lg:pl-16' : 'lg:pr-16 text-left lg:text-right'} relative z-10`}>
-                      <div className="bg-gray-50 p-8 md:p-12 rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl transition-shadow cursor-target group">
-                        <div className={`text-brand-yellow font-black text-6xl opacity-20 mb-[-2rem] select-none ${isEven ? 'text-left' : 'lg:text-right text-left'}`}>
-                          {step.step}
-                        </div>
-                        <h3 className="text-2xl md:text-3xl font-black text-brand-navy mb-4 relative z-10 group-hover:text-brand-yellow transition-colors">
-                          {step.title}
-                        </h3>
-                        <p className="text-gray-600 font-medium leading-relaxed">
-                          {step.desc}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-brand-navy rounded-full items-center justify-center border-8 border-white shadow-lg z-20 text-brand-yellow">
-                      {step.icon}
-                    </div>
-                    <div className="hidden lg:block w-1/2"></div>
-                  </div>
-                );
-              })}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {GALLERY_ITEMS.map((item, index) => (
+            <div
+              key={index}
+              className="group relative h-80 rounded-2xl overflow-hidden border border-black/5 bg-black/5 shadow-sm"
+            >
+              <Image
+                src={item.src}
+                alt={item.title}
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-700"
+                sizes="(max-width: 768px) 100vw, 33vw"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0c121e] via-[#0c121e]/30 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
+              <div className="absolute bottom-6 left-6 right-6">
+                <span className="text-[10px] font-semibold tracking-[0.2em] uppercase text-[#c89d28] block mb-1">
+                  {item.category}
+                </span>
+                <h3 className="font-serif text-lg text-white font-medium">{item.title}</h3>
+              </div>
             </div>
-          </div>
+          ))}
         </div>
       </section>
 
-      {/* 5. PRICING & PACKAGES */}
-      <section className="py-24 bg-brand-navy text-white">
-        <div className="max-w-[1400px] mx-auto px-6">
-          <div className="text-center max-w-3xl mx-auto mb-20">
-            <h4 className="text-brand-yellow text-sm font-bold tracking-widest uppercase mb-4">Renovation Pricing</h4>
-            <h2 className="text-4xl md:text-5xl font-black mb-6">Remodel Packages</h2>
-            <p className="text-gray-400 text-lg font-medium">
-              From minor touch-ups to massive teardowns, we have a package scaled for your project.
+      {/* 5. TRANSPARENT PACKAGES */}
+      <section className="py-24 bg-white border-y border-black/5 px-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#c89d28] mb-3">
+              Transparent Estimates
+            </p>
+            <h2 className="font-serif text-3xl sm:text-5xl font-normal text-[#0c121e]">
+              Renovation Packages
+            </h2>
+            <p className="text-gray-600 font-light mt-3 text-base">
+              Clear per-square-foot benchmarks covering demolition, structural repair, MEP replacement, and luxury modern finishes.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
-            {PRICING_TIERS.map((tier, index) => (
-              <div 
-                key={index} 
-                className={`relative bg-[#101e38] rounded-3xl p-10 border transition-all cursor-target flex flex-col ${
-                  tier.recommended 
-                    ? 'border-brand-yellow shadow-[0_0_30px_rgba(241,184,33,0.15)] transform lg:-translate-y-4' 
-                    : 'border-white/10 hover:border-white/30'
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {RENOVATION_PACKAGES.map((pkg, idx) => (
+              <div
+                key={idx}
+                className={`relative rounded-3xl p-8 sm:p-10 flex flex-col justify-between transition-all ${
+                  pkg.recommended
+                    ? "bg-[#0c121e] text-[#faf8f5] shadow-2xl ring-2 ring-[#c89d28]"
+                    : "bg-[#faf8f5] text-[#0c121e] border border-black/5"
                 }`}
               >
-                {tier.recommended && (
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-brand-yellow text-brand-navy px-4 py-1 rounded-full text-xs font-bold tracking-widest uppercase shadow-md">
-                    Most Popular
+                {pkg.recommended && (
+                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-[#c89d28] text-[#0c121e] text-[10px] font-bold tracking-widest uppercase">
+                    Most Popular Choice
                   </div>
                 )}
-                
-                <h3 className="text-2xl font-black text-white mb-2">{tier.name}</h3>
-                <p className="text-gray-400 font-medium mb-8 h-12">{tier.desc}</p>
-                
-                <div className="mb-8 flex items-baseline">
-                  <span className="text-5xl font-black text-brand-yellow">{tier.price}</span>
-                  <span className="text-gray-400 ml-2 font-medium">/{tier.unit}</span>
-                </div>
-                
-                <div className="w-full h-px bg-white/10 mb-8"></div>
-                
-                <ul className="space-y-4 mb-10 flex-grow">
-                  {tier.features.map((feat, i) => (
-                    <li key={i} className="flex items-start">
-                      <CheckCircle2 className="text-brand-yellow mr-3 shrink-0 mt-0.5" size={20} />
-                      <span className="text-gray-300 font-medium">{feat}</span>
-                    </li>
-                  ))}
-                </ul>
-                
-                <button className={`w-full py-4 rounded-xl font-black text-sm tracking-widest uppercase transition-colors ${
-                  tier.recommended 
-                    ? 'bg-brand-yellow hover:bg-yellow-400 text-brand-navy' 
-                    : 'bg-white/10 hover:bg-white/20 text-white'
-                }`}>
-                  Select Package
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* 6. GALLERY */}
-      <section className="py-24 bg-white">
-        <div className="max-w-[1400px] mx-auto px-6">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-16">
-            <div>
-              <h4 className="text-brand-yellow text-sm font-bold tracking-widest uppercase mb-4">Before & Afters</h4>
-              <h2 className="text-4xl md:text-5xl font-black text-brand-navy">Renovation Gallery</h2>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {GALLERY_IMAGES.map((img, index) => (
-              <div key={index} className={`relative overflow-hidden rounded-xl group cursor-target ${index === 0 ? 'md:col-span-2 md:row-span-2 h-[600px]' : 'h-[290px]'}`}>
-                <Image 
-                  src={img} 
-                  alt={`Renovation image ${index + 1}`} 
-                  fill
-                  className="object-cover group-hover:scale-110 transition-transform duration-700"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                />
-                <div className="absolute inset-0 bg-brand-navy/0 group-hover:bg-brand-navy/40 transition-colors duration-300 flex items-center justify-center">
-                  <div className="opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
-                    <button className="bg-white text-brand-navy px-6 py-2 rounded-full font-bold text-xs tracking-widest uppercase">
-                      View Transformation
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 7. FAQS */}
-      <section className="py-24 bg-gray-50 border-t border-gray-200">
-        <div className="max-w-4xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h4 className="text-brand-yellow text-sm font-bold tracking-widest uppercase mb-4">Got Questions?</h4>
-            <h2 className="text-4xl md:text-5xl font-black text-brand-navy">Frequently Asked Questions</h2>
-          </div>
-
-          <div className="space-y-4">
-            {FAQS.map((faq, index) => (
-              <div 
-                key={index} 
-                className={`bg-white border rounded-2xl overflow-hidden transition-all duration-300 cursor-target faq-item ${activeFaq === index ? 'border-brand-yellow shadow-md' : 'border-gray-200 hover:border-brand-yellow/50'}`}
-              >
-                <button 
-                  onClick={() => setActiveFaq(activeFaq === index ? null : index)}
-                  className="w-full px-8 py-6 text-left flex justify-between items-center focus:outline-none"
-                >
-                  <span className="text-lg font-bold text-brand-navy pr-8">{faq.q}</span>
-                  <ChevronDown 
-                    className={`text-brand-yellow shrink-0 transition-transform duration-300 ${activeFaq === index ? 'rotate-180' : ''}`} 
-                    size={24} 
-                  />
-                </button>
-                <div 
-                  className={`px-8 overflow-hidden transition-all duration-300 ease-in-out ${activeFaq === index ? 'max-h-96 pb-6 opacity-100' : 'max-h-0 opacity-0'}`}
-                >
-                  <p className="text-gray-600 font-medium leading-relaxed border-t border-gray-100 pt-4">
-                    {faq.a}
+                <div>
+                  <h3 className="font-serif text-2xl mb-2">{pkg.name}</h3>
+                  <p className={`text-xs mb-6 ${pkg.recommended ? "text-gray-400" : "text-gray-500"}`}>
+                    {pkg.desc}
                   </p>
+
+                  <div className="flex items-baseline gap-1 mb-8 pb-6 border-b border-black/10 dark:border-white/10">
+                    <span className="font-serif text-4xl sm:text-5xl font-normal text-[#c89d28]">
+                      {pkg.price}
+                    </span>
+                    <span className={`text-xs uppercase tracking-wider ${pkg.recommended ? "text-gray-400" : "text-gray-500"}`}>
+                      {pkg.unit}
+                    </span>
+                  </div>
+
+                  <ul className="space-y-3.5 mb-10">
+                    {pkg.features.map((feat, fIdx) => (
+                      <li key={fIdx} className="flex items-start gap-3 text-xs sm:text-sm font-light">
+                        <Check className="w-4 h-4 text-[#c89d28] shrink-0 mt-0.5" />
+                        <span>{feat}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
+
+                <Link
+                  href="/contact?service=renovation"
+                  className={`w-full py-4 rounded-full text-center text-xs font-semibold tracking-widest uppercase transition-all ${
+                    pkg.recommended
+                      ? "bg-[#c89d28] hover:bg-[#b58b20] text-[#0c121e]"
+                      : "bg-[#0c121e] hover:bg-black text-[#faf8f5]"
+                  }`}
+                >
+                  Request Site Audit
+                </Link>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* 8. CTA */}
-      <section className="py-32 bg-brand-yellow relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10 flex items-center justify-center pointer-events-none">
-           <div className="w-[800px] h-[800px] border-[100px] border-brand-navy rounded-full absolute"></div>
-        </div>
-        
-        <div className="relative max-w-4xl mx-auto px-6 text-center z-10">
-          <h4 className="text-brand-navy text-sm font-bold tracking-[0.3em] uppercase mb-6">READY FOR A CHANGE?</h4>
-          <h2 className="text-5xl md:text-7xl font-black text-brand-navy leading-none mb-12">
-            Let&apos;s rebuild it better.
+      {/* 6. FAQS */}
+      <section className="py-24 px-6 max-w-4xl mx-auto">
+        <div className="text-center mb-16">
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#c89d28] mb-3">
+            Common Inquiries
+          </p>
+          <h2 className="font-serif text-3xl sm:text-5xl font-normal text-[#0c121e]">
+            Frequently Asked Questions
           </h2>
-          
-          <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6">
-            <button className="w-full sm:w-auto bg-brand-navy hover:bg-[#162442] text-white px-12 py-5 rounded-full font-black text-sm tracking-widest uppercase shadow-2xl transition-transform hover:scale-105 cursor-target">
-              Schedule Site Visit
-            </button>
-            <button className="w-full sm:w-auto bg-transparent hover:bg-white/30 text-brand-navy border-2 border-brand-navy px-12 py-5 rounded-full font-black text-sm tracking-widest uppercase transition-colors cursor-target">
-              Call +91 96319 80881
-            </button>
-          </div>
+        </div>
+
+        <div className="space-y-4">
+          {FAQS.map((faq, index) => (
+            <div
+              key={index}
+              className="bg-white rounded-2xl border border-black/5 overflow-hidden transition-all"
+            >
+              <button
+                onClick={() => setActiveFaq(activeFaq === index ? null : index)}
+                className="w-full px-7 py-6 text-left flex justify-between items-center gap-4 cursor-pointer"
+              >
+                <span className="font-serif text-lg text-[#0c121e] font-medium">
+                  {faq.q}
+                </span>
+                <ChevronDown
+                  className={`text-[#c89d28] shrink-0 transition-transform duration-300 ${
+                    activeFaq === index ? "rotate-180" : ""
+                  }`}
+                  size={20}
+                />
+              </button>
+              {activeFaq === index && (
+                <div className="px-7 pb-6 pt-2 border-t border-black/5 text-gray-600 font-light text-sm sm:text-base leading-relaxed">
+                  {faq.a}
+                </div>
+              )}
+            </div>
+          ))}
         </div>
       </section>
 
+      {/* 7. RENOVATION CTA */}
+      <section className="py-24 bg-[#0c121e] text-[#faf8f5] relative overflow-hidden">
+        <div className="relative max-w-5xl mx-auto px-6 text-center z-10">
+          <p className="text-xs font-semibold tracking-[0.3em] uppercase text-[#c89d28] mb-4">
+            Reimagine Your Space
+          </p>
+          <h2 className="font-serif text-3xl sm:text-5xl md:text-6xl font-normal mb-8 leading-tight">
+            Transform Your Existing Home into a <br />
+            <span className="italic text-[#c89d28]">Modern Architectural Marvel</span>
+          </h2>
+          <p className="text-gray-300 text-base sm:text-lg font-light max-w-2xl mx-auto mb-10 leading-relaxed">
+            Schedule an on-site structural and damp assessment. Our engineers inspect load-bearing walls and provide an itemized modernization plan.
+          </p>
+
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+            <Link
+              href="/contact?service=renovation"
+              className="w-full sm:w-auto bg-[#c89d28] hover:bg-[#b58b20] text-[#0c121e] px-10 py-4 rounded-full font-semibold text-xs tracking-widest uppercase shadow-xl transition-all"
+            >
+              Book Renovation Assessment
+            </Link>
+            <a
+              href="tel:+917004465611"
+              className="w-full sm:w-auto border border-white/20 hover:border-white/40 text-[#faf8f5] px-10 py-4 rounded-full font-semibold text-xs tracking-widest uppercase transition-all bg-white/5"
+            >
+              Direct Renovation Line: +91 70044 65611
+            </a>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }

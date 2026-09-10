@@ -1,23 +1,24 @@
 "use client";
 
-import React, { useState } from 'react';
-import Image from 'next/image';
-import { 
-  Sofa, 
-  Lightbulb, 
-  Paintbrush, 
-  Scissors, 
-  Layout, 
-  CheckCircle2, 
-  ChevronDown, 
-  Droplets,
-  Wind,
-  Sun,
-  Crown,
-  Box,
+import React, { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import {
+  Sofa,
   Palette,
-  Hammer
-} from 'lucide-react';
+  Layers,
+  Sparkles,
+  CheckCircle2,
+  ChevronDown,
+  ArrowRight,
+  Shield,
+  PhoneCall,
+  Scissors,
+  Hammer,
+  Crown,
+  Lightbulb,
+  Check
+} from "lucide-react";
 
 // ==========================================
 // DATA STRUCTURES
@@ -26,116 +27,122 @@ import {
 const PROCESS_STEPS = [
   {
     step: "01",
-    title: "Moodboarding & Theme Selection",
-    desc: "We begin by understanding your personal taste. Do you prefer Minimalist, Bohemian, Industrial, or Neo-Classical? We create moodboards to lock in the aesthetic.",
-    icon: <Palette size={32} />
+    title: "Aesthetic Moodboarding & Client Brief",
+    desc: "Understanding your lifestyle rituals, preferred textures, color harmony, and functional storage requirements across every room.",
+    icon: <Palette className="text-[#c89d28]" size={26} />
   },
   {
     step: "02",
-    title: "Spatial Planning & Zoning",
-    desc: "Optimizing the flow of the room. We map out exactly where the furniture, lighting fixtures, and decor will sit to maximize both space and utility.",
-    icon: <Layout size={32} />
+    title: "3D Photorealistic Interior Walkthroughs",
+    desc: "Raytraced 4K visuals for living areas, modular kitchen, and master suites displaying exact laminates, veneers, and lighting before fabrication.",
+    icon: <Lightbulb className="text-[#c89d28]" size={26} />
   },
   {
     step: "03",
-    title: "3D Interior Rendering",
-    desc: "Before buying a single piece of furniture, you will see exactly what your room will look like through our hyper-realistic 3D walkthroughs.",
-    icon: <Box size={32} />
+    title: "Material Boards & Hardware Vetting",
+    desc: "Tactile sample verification of Century Club Prime marine ply, German soft-close hinges (Hettich/Hafele), and quartz/granite countertops.",
+    icon: <Scissors className="text-[#c89d28]" size={26} />
   },
   {
     step: "04",
-    title: "Material & Fabric Selection",
-    desc: "We help you select premium upholstery, curtains, wallpapers, and floorings. Touch and feel the samples before they go onto your walls.",
-    icon: <Scissors size={32} />
+    title: "Factory CNC Joinery & Zero-Bubble Press",
+    desc: "Millimeter-precision modular cutting, PUR hot-melt edge banding, and hydraulic hot-press veneer application in our dedicated facility.",
+    icon: <Hammer className="text-[#c89d28]" size={26} />
   },
   {
     step: "05",
-    title: "Custom Furniture Fabrication",
-    desc: "Our in-house carpenters craft bespoke furniture that fits your space perfectly. No compromises on size, color, or ergonomics.",
-    icon: <Hammer size={32} />
+    title: "On-Site Installation & False Ceilings",
+    desc: "Saint-Gobain Gyproc ceilings, concealed magnetic track lighting, acoustic wall paneling, and dust-controlled modular carcass assembly.",
+    icon: <Layers className="text-[#c89d28]" size={26} />
   },
   {
     step: "06",
-    title: "Styling & Final Reveal",
-    desc: "The magic touch. We bring in the artifacts, rugs, plants, and lighting to style the space. You walk into a fully finished, magazine-ready home.",
-    icon: <Crown size={32} />
+    title: "Diamond Polish & White-Glove Handover",
+    desc: "Italian marble diamond polishing, PU lacquer coating, soft furnishings staging, deep vacuuming, and 10-year warranty handover.",
+    icon: <Crown className="text-[#c89d28]" size={26} />
   }
 ];
 
-const FEATURES = [
+const CRAFTSMANSHIP_STANDARDS = [
   {
-    title: "Bespoke Furniture",
-    desc: "We don't rely solely on ready-made catalogs. We design and manufacture custom furniture tailored specifically to the dimensions of your room.",
-    icon: <Sofa className="text-brand-yellow" size={24} />
+    title: "10-Year Timber Warranty",
+    desc: "Every cabinet and carcass is fabricated exclusively from 100% boiling-water-proof (BWP 710) marine plywood treated against termites and borers.",
+    icon: <Shield className="text-[#c89d28]" size={22} />
   },
   {
-    title: "Smart Lighting Design",
-    desc: "Lighting changes everything. We layer ambient, task, and accent lighting to create different moods for different times of the day.",
-    icon: <Lightbulb className="text-brand-yellow" size={24} />
+    title: "German Soft-Close Hardware",
+    desc: "Standard inclusion of Hettich Sensys hinges, Quadro soft-close runners, and Hafele lift-up flap fittings tested for 200,000 opening cycles.",
+    icon: <Crown className="text-[#c89d28]" size={22} />
   },
   {
-    title: "Color Psychology",
-    desc: "We utilize color theory to evoke specific emotions. Calming blues for bedrooms, energetic yellows for kitchens, and sophisticated neutrals for living areas.",
-    icon: <Paintbrush className="text-brand-yellow" size={24} />
+    title: "Zero-Edge PUR Banding",
+    desc: "Factory edge-banding using moisture-resistant polyurethane glue prevents peeling and water seepage in wet kitchen and vanity areas.",
+    icon: <Layers className="text-[#c89d28]" size={22} />
   },
   {
-    title: "Acoustic Treatment",
-    desc: "For home theaters and studios, we integrate acoustic paneling to ensure perfect sound absorption without ruining the room's aesthetic.",
-    icon: <Wind className="text-brand-yellow" size={24} />
+    title: "Architectural Lighting Design",
+    desc: "Layered illumination: ambient cove lighting (3000K warm white), high CRI (>90) anti-glare COB spotlights, and sleek magnetic track profiles.",
+    icon: <Lightbulb className="text-[#c89d28]" size={22} />
   },
   {
-    title: "Premium Textures",
-    desc: "From Venetian plaster and fluted wooden panels to metallic accents, we add layers of texture to make the space feel rich and multidimensional.",
-    icon: <Droplets className="text-brand-yellow" size={24} />
+    title: "Anti-Stain Quartz & Italian Marble",
+    desc: "Countertops fitted with non-porous engineered quartz (Caesarstone / KalingaStone) and bookmatched natural Italian marble with nano-coating.",
+    icon: <Sparkles className="text-[#c89d28]" size={22} />
   },
   {
-    title: "Natural Light Optimization",
-    desc: "We manipulate mirrors, sheer curtains, and reflective surfaces to bounce natural sunlight deep into the darkest corners of your home.",
-    icon: <Sun className="text-brand-yellow" size={24} />
+    title: "Dust-Free Modular On-Site Assembly",
+    desc: "Pre-drilled and pre-finished modular flat-packs assembled on-site with minimal noise, zero indoor sawing dust, and rapid turnaround.",
+    icon: <CheckCircle2 className="text-[#c89d28]" size={22} />
   }
 ];
 
-const PRICING_TIERS = [
+const INTERIOR_PACKAGES = [
   {
-    name: "Essential Decor",
-    price: "₹800",
-    unit: "per sq.ft",
-    desc: "Perfect for quick makeovers. Focuses on painting, basic lighting, and readymade furniture sourcing.",
+    name: "Essential Luxury Fitout",
+    price: "₹850",
+    unit: "per sq.ft carpet",
+    desc: "Complete interior essentials for modern apartments and builder floors.",
     features: [
-      "2D Furniture Layout",
-      "Color Consultation",
-      "Basic False Ceiling",
-      "Standard Lighting Setup",
-      "Furniture Sourcing Assistance"
+      "Century Sainik 710 Grade BWP Plywood",
+      "1.0mm Premium Matte/Gloss Laminates",
+      "Hettich / Ebco Soft-Close Drawer Systems",
+      "Saint-Gobain Gyproc False Ceilings (Cove & Halogen)",
+      "Asian Paints Royale Luxury Emulsion on Walls",
+      "Full Modular Kitchen with Tandem Boxes",
+      "Wardrobes with Loft Storage in 2 Bedrooms"
     ],
     recommended: false
   },
   {
-    name: "Complete Makeover",
-    price: "₹1,500",
-    unit: "per sq.ft",
-    desc: "Our most popular interior package. Complete transformation with custom modular woodwork.",
+    name: "Signature Residence Grade",
+    price: "₹1,350",
+    unit: "per sq.ft carpet",
+    desc: "Our most acclaimed interior package for duplexes, penthouses, and luxury villas.",
     features: [
-      "Everything in Essential",
-      "3D Renderings (All Rooms)",
-      "Custom Modular Kitchen",
-      "Bespoke Wardrobes",
-      "Premium False Ceiling Design"
+      "CenturyPly Club Prime 710 Marine Plywood (Lifetime Tier)",
+      "Natural Teak / Walnut Veneer with Melamine / PU Polish",
+      "Full German Hettich Sensys & Hafele Hardware Suite",
+      "Acrylic / Anti-Scratch Glass Acrylic Modular Kitchen",
+      "Acoustic Fluted Wall Louvers & Charcoal Louver Paneling",
+      "Concealed Magnetic Track Profile Lighting with Smart Dimming",
+      "Designer Vanity Units with Backlit Anti-Fog Mirrors",
+      "10-Year Comprehensive Woodwork Warranty"
     ],
     recommended: true
   },
   {
-    name: "Ultra Luxury",
-    price: "₹3,000+",
-    unit: "per sq.ft",
-    desc: "For those who want magazine-cover aesthetics with imported materials and home automation.",
+    name: "Haute Bespoke Masterpiece",
+    price: "₹1,950",
+    unit: "per sq.ft carpet",
+    desc: "Uncompromising ultra-luxury with imported marble, bespoke upholstery, and home automation.",
     features: [
-      "Everything in Complete",
-      "Imported Italian Furniture",
-      "Smart Home Integration",
-      "Acoustic Home Theater Setup",
-      "Custom Art & Artifact Sourcing",
-      "Dedicated Interior Stylist"
+      "Everything in Signature Residence Tier",
+      "Bookmatched Italian Bottochino / Statuario Marble Flooring",
+      "Custom Leatherette / Velvet Upholstered Beds & Sofas",
+      "Smart Home Automation (Lights, Curtains, Climate via iPad)",
+      "High-Gloss Polyester (Lacquered Glass) Kitchen Finishes",
+      "Walk-In Dressing Rooms with Tinted Fluted Glass Profiles",
+      "Dedicated Senior Interior Decorator & Styling Director"
     ],
     recommended: false
   }
@@ -143,376 +150,395 @@ const PRICING_TIERS = [
 
 const FAQS = [
   {
-    q: "Do you only do complete homes or can you design a single room?",
-    a: "While we specialize in complete home interiors, we do take up single-room projects (like a kitchen remodel or home theater setup) depending on the scope of work."
+    q: "Are the modular kitchens and wardrobes manufactured on-site or in a factory?",
+    a: "All modular cabinetry, drawer carcasses, and shutter panels are precision-cut, CNC-drilled, and PUR-edgebanded in our factory facility. Only the assembly and precision anchoring occur on your site, keeping your residence free of toxic airborne sawdust and loud machinery."
   },
   {
-    q: "Do you manufacture the furniture yourselves?",
-    a: "Yes! We have our own manufacturing unit where our skilled carpenters and craftsmen build bespoke furniture, wardrobes, and modular kitchens to ensure perfect finishing."
+    q: "What warranty does Galaxy Interior offer on interior woodwork?",
+    a: "We provide a 10-Year Written Warranty against termite infestation, borer attacks, and manufacturing delamination on all Century Club Prime marine ply installations, and lifetime mechanical warranties on Hettich and Hafele German hardware."
   },
   {
-    q: "Can I keep my old furniture?",
-    a: "Absolutely. We are experts at upcycling. We can refurbish, polish, or reupholster your existing vintage or sentimental furniture to blend seamlessly into the new design."
+    q: "Can you execute custom furniture pieces tailored to our room sizes?",
+    a: "Yes. In addition to modular storage, our skilled in-house master craftsmen fabricate custom dining tables, bespoke upholstered headboards, curved sofas, and statement consoles exactly scaled to your room's architectural proportions."
   },
   {
-    q: "How long does the interior execution take?",
-    a: "For a standard 3BHK apartment, it typically takes 45 to 60 days from the moment the 3D designs are finalized and approved."
+    q: "What is the typical execution time for a 3BHK interior project?",
+    a: "From 3D design freeze and material sign-off to final white-glove handover, a comprehensive 3BHK interior execution requires approximately 45 to 60 calendar days."
   },
   {
-    q: "Do you handle civil changes inside the apartment?",
-    a: "Yes. If a wall needs to be knocked down to expand the living room, or if bathrooms need complete re-tiling and new plumbing, our civil team handles it."
-  },
-  {
-    q: "What is your warranty policy on interiors?",
-    a: "We offer a 5-year warranty on all custom woodwork (wardrobes, kitchens) against manufacturing defects, and standard brand warranties on hardware (like Hettich or Hafele hinges)."
-  },
-  {
-    q: "How do you charge for interior projects?",
-    a: "We charge either on a per-square-foot basis or as a percentage of the total project cost, depending on the scale and complexity. The BOQ is shared transparently before execution."
+    q: "Do you handle false ceilings, electrical rewiring, and painting as well?",
+    a: "Yes. Galaxy Interior offers true turnkey interior execution. We manage Gyproc false ceilings, concealed electrical wiring, sanitary plumbing fixtures, wall paneling, and Asian Paints Royale painting under a single unified supervisor."
   }
 ];
 
-const GALLERY_IMAGES = [
-  "/services/service_interior_1787300041689.jpg",
-  "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=1200",
-  "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&q=80&w=1200",
-  "https://images.unsplash.com/photo-1593696140826-c58b021acf8b?auto=format&fit=crop&q=80&w=1200",
-  "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&q=80&w=1200",
-  "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80&w=1200"
+const GALLERY_ITEMS = [
+  {
+    src: "/services/service_interior_1787300041689.jpg",
+    title: "Double-Height Luxury Living Room",
+    category: "Living Spaces"
+  },
+  {
+    src: "/generated/interior_gallery_1.png",
+    title: "Modern Dining & Ambient Lighting",
+    category: "Dining & Lounges"
+  },
+  {
+    src: "/generated/interior_gallery_2.png",
+    title: "Bespoke Master Suite & Paneling",
+    category: "Master Bedrooms"
+  },
+  {
+    src: "/generated/inspiration_modular_kitchen.jpg",
+    title: "Handleless Acrylic Modular Kitchen",
+    category: "Kitchen & Storage"
+  },
+  {
+    src: "/generated/inspiration_tv_unit.jpg",
+    title: "Fluted Louver TV Media Console",
+    category: "Entertainment Walls"
+  },
+  {
+    src: "/generated/inspiration_false_ceiling.jpg",
+    title: "Indirect Cove Architectural Ceiling",
+    category: "Lighting & Ceilings"
+  }
 ];
-
-// ==========================================
-// COMPONENT
-// ==========================================
 
 export default function InteriorProjectPage() {
   const [activeFaq, setActiveFaq] = useState<number | null>(0);
 
   return (
-    <main className="bg-white">
-
+    <main className="bg-[#faf8f5] text-[#0c121e] min-h-screen">
       {/* 1. HERO SECTION */}
-      <section className="relative w-full h-[80vh] min-h-[600px] flex items-center justify-center overflow-hidden">
+      <section className="relative w-full min-h-[75vh] flex items-center justify-center overflow-hidden pt-28 pb-20 bg-[#0c121e]">
         <div className="absolute inset-0 z-0">
-          <Image 
-            src="/services/service_interior_1787300041689.jpg" 
-            alt="Interior Projects" 
+          <Image
+            src="/services/service_interior_1787300041689.jpg"
+            alt="Galaxy Interior Luxury Residential Interior Execution"
             fill
             priority
-            className="object-cover animate-ken-burns"
+            className="object-cover opacity-35"
             sizes="100vw"
           />
-          <div className="absolute inset-0 bg-brand-navy/70 mix-blend-multiply"></div>
-          <div className="absolute inset-0 bg-gradient-to-t from-brand-navy via-transparent to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0c121e] via-[#0c121e]/80 to-transparent" />
         </div>
 
-        <div className="relative z-10 text-center max-w-5xl mx-auto px-6 mt-16">
-          <div className="inline-block px-6 py-2 border border-brand-yellow/50 rounded-full mb-6 backdrop-blur-sm bg-black/20">
-            <span className="text-brand-yellow font-bold tracking-widest uppercase text-xs">Service Overview</span>
+        <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#faf8f5]/10 border border-[#c89d28]/30 backdrop-blur-md mb-6">
+            <Sparkles className="w-3.5 h-3.5 text-[#c89d28]" />
+            <span className="text-[11px] font-semibold tracking-[0.25em] uppercase text-[#c89d28]">
+              Discipline 03 &bull; Luxury Residential Interiors
+            </span>
           </div>
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white mb-8 leading-tight drop-shadow-2xl">
-            Interior <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-yellow to-yellow-200">Design</span>
+
+          <h1 className="font-serif text-4xl sm:text-6xl md:text-7xl font-normal text-[#faf8f5] tracking-tight leading-[1.1] mb-6">
+            Bespoke Luxury Interiors &amp; <br />
+            <span className="italic font-light text-[#c89d28]">Artisanal Joinery</span>
           </h1>
-          <p className="text-gray-300 text-lg md:text-2xl font-medium max-w-3xl mx-auto leading-relaxed mb-12">
-            Transforming bare walls into living art. We curate spaces that reflect your personality, utilizing premium materials and bespoke furniture.
+
+          <p className="text-gray-300 text-base sm:text-xl font-light max-w-3xl mx-auto leading-relaxed mb-10">
+            Factory-grade CNC woodwork, Century Club Prime marine plywood, German soft-close fittings, and hand-selected Italian marble. Crafted for a lifetime of beauty.
           </p>
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-6">
-            <button className="bg-brand-yellow hover:bg-yellow-400 text-brand-navy px-10 py-5 rounded-full font-black text-sm tracking-widest uppercase shadow-[0_0_20px_rgba(241,184,33,0.3)] transition-all hover:scale-105 w-full sm:w-auto">
-              Book a Stylist
-            </button>
-            <button className="bg-transparent hover:bg-white/10 text-white border border-white px-10 py-5 rounded-full font-black text-sm tracking-widest uppercase transition-colors w-full sm:w-auto">
-              Explore Portfolio
-            </button>
-          </div>
-        </div>
 
-        {/* Scroll indicator */}
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center animate-bounce">
-          <span className="text-white/50 text-xs tracking-widest uppercase font-bold mb-2">Scroll</span>
-          <ChevronDown className="text-brand-yellow" />
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link
+              href="/contact?service=interior"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-[#c89d28] hover:bg-[#b58b20] text-[#0c121e] font-semibold text-xs tracking-widest uppercase transition-all shadow-lg shadow-[#c89d28]/20"
+            >
+              Consult an Interior Designer
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+            <a
+              href="tel:+917004465611"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full border border-white/20 hover:border-white/40 text-[#faf8f5] font-semibold text-xs tracking-widest uppercase transition-all bg-white/5 backdrop-blur-sm"
+            >
+              <PhoneCall className="w-4 h-4 text-[#c89d28]" />
+              Helpline +91 70044 65611
+            </a>
+          </div>
+
+          {/* Quick Metrics Bar */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16 pt-10 border-t border-white/10 max-w-4xl mx-auto">
+            <div>
+              <p className="font-serif text-2xl md:text-3xl text-[#faf8f5]">100% BWP</p>
+              <p className="text-xs text-gray-400 uppercase tracking-widest mt-1">Marine Grade 710 Ply</p>
+            </div>
+            <div>
+              <p className="font-serif text-2xl md:text-3xl text-[#faf8f5]">Hettich</p>
+              <p className="text-xs text-gray-400 uppercase tracking-widest mt-1">German Hardware Standard</p>
+            </div>
+            <div>
+              <p className="font-serif text-2xl md:text-3xl text-[#faf8f5]">10 Years</p>
+              <p className="text-xs text-gray-400 uppercase tracking-widest mt-1">Written Timber Warranty</p>
+            </div>
+            <div>
+              <p className="font-serif text-2xl md:text-3xl text-[#faf8f5]">45 Days</p>
+              <p className="text-xs text-gray-400 uppercase tracking-widest mt-1">Guaranteed Handover</p>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* 2. EXECUTIVE OVERVIEW */}
-      <section className="py-24 md:py-32 bg-brand-navy relative overflow-hidden">
-        <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full border-[1px] border-white/5"></div>
-        <div className="max-w-[1400px] mx-auto px-6 relative z-10">
-          <div className="flex flex-col lg:flex-row gap-16 items-center">
-            <div className="w-full lg:w-1/2">
-              <h4 className="text-brand-yellow text-sm font-bold tracking-widest uppercase mb-4 flex items-center">
-                <span className="w-12 h-px bg-brand-yellow mr-4"></span>
-                The Aesthetics
-              </h4>
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-8 leading-tight">
-                Spaces that speak before you do.
+      {/* 2. INTERIOR PROCESS */}
+      <section className="py-24 px-6 max-w-7xl mx-auto">
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#c89d28] mb-3">
+            Artisan Precision
+          </p>
+          <h2 className="font-serif text-3xl sm:text-5xl font-normal text-[#0c121e] tracking-tight">
+            The 6-Stage Interior Transformation
+          </h2>
+          <p className="text-gray-600 font-light mt-4 text-base sm:text-lg">
+            From preliminary material swatches to dust-free factory modular assembly and diamond-grade marble polishing.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {PROCESS_STEPS.map((step, idx) => (
+            <div
+              key={idx}
+              className="bg-white p-8 rounded-2xl border border-black/5 shadow-sm hover:shadow-md transition-all group relative overflow-hidden"
+            >
+              <div className="flex items-center justify-between mb-6">
+                <span className="font-serif text-3xl font-light text-[#c89d28]">
+                  {step.step}
+                </span>
+                <div className="w-12 h-12 rounded-xl bg-[#faf8f5] flex items-center justify-center border border-black/5 group-hover:bg-[#c89d28]/10 transition-colors">
+                  {step.icon}
+                </div>
+              </div>
+              <h3 className="font-serif text-xl font-medium text-[#0c121e] mb-3">
+                {step.title}
+              </h3>
+              <p className="text-gray-600 font-light text-sm leading-relaxed">
+                {step.desc}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 3. CRAFTSMANSHIP STANDARDS */}
+      <section className="py-24 bg-[#0c121e] text-[#faf8f5] px-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#c89d28] mb-3">
+                Material Excellence
+              </p>
+              <h2 className="font-serif text-3xl sm:text-5xl font-normal tracking-tight">
+                Our Craftsmanship Benchmarks
               </h2>
-              <div className="w-24 h-2 bg-brand-yellow mb-8"></div>
-              <p className="text-gray-400 text-lg leading-relaxed mb-6 font-medium">
-                Your home is your ultimate sanctuary. Our interior design philosophy is built around one simple rule: The space must serve the people in it. We balance jaw-dropping aesthetics with extreme functional comfort.
-              </p>
-              <p className="text-gray-400 text-lg leading-relaxed font-medium mb-10">
-                From the moment you turn the key, every texture, every light beam, and every piece of furniture has been meticulously planned to create an atmosphere of pure luxury and deep relaxation.
-              </p>
-              
-              <div className="grid grid-cols-2 gap-8 border-t border-white/10 pt-10">
-                <div>
-                  <div className="text-5xl font-black text-brand-yellow mb-2">150+</div>
-                  <div className="text-white text-xs font-bold tracking-widest uppercase">Homes Styled</div>
-                </div>
-                <div>
-                  <div className="text-5xl font-black text-brand-yellow mb-2">100%</div>
-                  <div className="text-white text-xs font-bold tracking-widest uppercase">Bespoke Furniture</div>
-                </div>
-              </div>
             </div>
-            
-            <div className="w-full lg:w-1/2 relative">
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl">
-                <Image 
-                  src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=1000" 
-                  alt="Luxury Interior" 
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                />
-                <div className="absolute inset-0 bg-brand-navy/20 mix-blend-multiply"></div>
-              </div>
-              
-              <div className="absolute -bottom-10 -left-10 bg-white p-8 rounded-2xl shadow-2xl max-w-[250px] border border-gray-100 hidden md:block">
-                <Crown className="text-brand-yellow w-12 h-12 mb-4" />
-                <h4 className="text-brand-navy font-black text-xl mb-2">Premium Finish</h4>
-                <p className="text-gray-500 text-sm font-medium">Only the finest imported materials and laminates used in our execution.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 3. CORE FEATURES GRID */}
-      <section className="py-24 bg-gray-50">
-        <div className="max-w-[1400px] mx-auto px-6">
-          <div className="text-center max-w-3xl mx-auto mb-20">
-            <h4 className="text-brand-navy text-sm font-bold tracking-widest uppercase mb-4">Interior Elements</h4>
-            <h2 className="text-4xl md:text-5xl font-black text-brand-navy mb-6">The Magic is in the Details</h2>
-            <p className="text-gray-600 text-lg font-medium">
-              A beautifully designed room is a sum of hundreds of micro-decisions. We obsess over all of them.
+            <p className="text-gray-400 font-light max-w-md text-sm sm:text-base">
+              We eliminate cheap particle boards, noisy hinges, and bubbled laminates through strict factory tolerances.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {FEATURES.map((feature, index) => (
-              <div key={index} className="bg-white p-10 rounded-2xl shadow-lg border border-gray-100 hover:shadow-2xl transition-shadow group cursor-target">
-                <div className="w-16 h-16 bg-brand-navy rounded-xl flex items-center justify-center mb-8 group-hover:bg-brand-yellow transition-colors">
-                  {feature.icon}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {CRAFTSMANSHIP_STANDARDS.map((std, index) => (
+              <div
+                key={index}
+                className="bg-white/5 border border-white/10 rounded-2xl p-7 hover:border-[#c89d28]/40 transition-colors"
+              >
+                <div className="w-10 h-10 rounded-lg bg-[#c89d28]/10 flex items-center justify-center mb-5">
+                  {std.icon}
                 </div>
-                <h3 className="text-2xl font-black text-brand-navy mb-4">{feature.title}</h3>
-                <p className="text-gray-600 font-medium leading-relaxed">
-                  {feature.desc}
-                </p>
+                <h3 className="font-serif text-xl text-[#faf8f5] mb-2">{std.title}</h3>
+                <p className="text-gray-400 text-sm font-light leading-relaxed">{std.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* 4. METHODOLOGY / PROCESS TIMELINE */}
-      <section className="py-24 bg-white">
-        <div className="max-w-[1400px] mx-auto px-6">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-20">
-            <div className="max-w-2xl">
-              <h4 className="text-brand-yellow text-sm font-bold tracking-widest uppercase mb-4">The Process</h4>
-              <h2 className="text-4xl md:text-5xl font-black text-brand-navy mb-6">From Bare Shell to Beautiful</h2>
-              <p className="text-gray-600 text-lg font-medium">
-                Our interior design journey is collaborative, exciting, and completely stress-free for you.
-              </p>
-            </div>
+      {/* 4. GALLERY SHOWCASE */}
+      <section className="py-24 px-6 max-w-7xl mx-auto">
+        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#c89d28] mb-3">
+              Spaces That Inspire
+            </p>
+            <h2 className="font-serif text-3xl sm:text-5xl font-normal text-[#0c121e]">
+              Interior Design Portfolio
+            </h2>
           </div>
+          <Link
+            href="/projects"
+            className="inline-flex items-center gap-2 text-xs font-semibold tracking-widest uppercase text-[#0c121e] hover:text-[#c89d28] transition-colors"
+          >
+            Explore Completed Residences <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
 
-          <div className="relative">
-            <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-1 bg-gray-100 -translate-x-1/2"></div>
-            
-            <div className="space-y-12 lg:space-y-0 relative">
-              {PROCESS_STEPS.map((step, index) => {
-                const isEven = index % 2 === 0;
-                return (
-                  <div key={index} className={`flex flex-col lg:flex-row items-center w-full ${isEven ? 'lg:flex-row-reverse' : ''} mb-12 lg:mb-24 relative`}>
-                    <div className={`w-full lg:w-1/2 ${isEven ? 'lg:pl-16' : 'lg:pr-16 text-left lg:text-right'} relative z-10`}>
-                      <div className="bg-gray-50 p-8 md:p-12 rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl transition-shadow cursor-target group">
-                        <div className={`text-brand-yellow font-black text-6xl opacity-20 mb-[-2rem] select-none ${isEven ? 'text-left' : 'lg:text-right text-left'}`}>
-                          {step.step}
-                        </div>
-                        <h3 className="text-2xl md:text-3xl font-black text-brand-navy mb-4 relative z-10 group-hover:text-brand-yellow transition-colors">
-                          {step.title}
-                        </h3>
-                        <p className="text-gray-600 font-medium leading-relaxed">
-                          {step.desc}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-brand-navy rounded-full items-center justify-center border-8 border-white shadow-lg z-20 text-brand-yellow">
-                      {step.icon}
-                    </div>
-                    <div className="hidden lg:block w-1/2"></div>
-                  </div>
-                );
-              })}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {GALLERY_ITEMS.map((item, index) => (
+            <div
+              key={index}
+              className="group relative h-80 rounded-2xl overflow-hidden border border-black/5 bg-black/5 shadow-sm"
+            >
+              <Image
+                src={item.src}
+                alt={item.title}
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-700"
+                sizes="(max-width: 768px) 100vw, 33vw"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0c121e] via-[#0c121e]/30 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
+              <div className="absolute bottom-6 left-6 right-6">
+                <span className="text-[10px] font-semibold tracking-[0.2em] uppercase text-[#c89d28] block mb-1">
+                  {item.category}
+                </span>
+                <h3 className="font-serif text-lg text-white font-medium">{item.title}</h3>
+              </div>
             </div>
-          </div>
+          ))}
         </div>
       </section>
 
-      {/* 5. PRICING & PACKAGES */}
-      <section className="py-24 bg-brand-navy text-white">
-        <div className="max-w-[1400px] mx-auto px-6">
-          <div className="text-center max-w-3xl mx-auto mb-20">
-            <h4 className="text-brand-yellow text-sm font-bold tracking-widest uppercase mb-4">Interior Pricing</h4>
-            <h2 className="text-4xl md:text-5xl font-black mb-6">Styling Packages</h2>
-            <p className="text-gray-400 text-lg font-medium">
-              Choose a package that fits your budget. We bring luxury to every tier.
+      {/* 5. TRANSPARENT PACKAGES */}
+      <section className="py-24 bg-white border-y border-black/5 px-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#c89d28] mb-3">
+              Itemized Quotations
+            </p>
+            <h2 className="font-serif text-3xl sm:text-5xl font-normal text-[#0c121e]">
+              Interior Specifications &amp; Packages
+            </h2>
+            <p className="text-gray-600 font-light mt-3 text-base">
+              Transparent per-square-foot carpet rates with legally binding material schedules and zero surprise bills.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
-            {PRICING_TIERS.map((tier, index) => (
-              <div 
-                key={index} 
-                className={`relative bg-[#101e38] rounded-3xl p-10 border transition-all cursor-target flex flex-col ${
-                  tier.recommended 
-                    ? 'border-brand-yellow shadow-[0_0_30px_rgba(241,184,33,0.15)] transform lg:-translate-y-4' 
-                    : 'border-white/10 hover:border-white/30'
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {INTERIOR_PACKAGES.map((pkg, idx) => (
+              <div
+                key={idx}
+                className={`relative rounded-3xl p-8 sm:p-10 flex flex-col justify-between transition-all ${
+                  pkg.recommended
+                    ? "bg-[#0c121e] text-[#faf8f5] shadow-2xl ring-2 ring-[#c89d28]"
+                    : "bg-[#faf8f5] text-[#0c121e] border border-black/5"
                 }`}
               >
-                {tier.recommended && (
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-brand-yellow text-brand-navy px-4 py-1 rounded-full text-xs font-bold tracking-widest uppercase shadow-md">
-                    Most Popular
+                {pkg.recommended && (
+                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-[#c89d28] text-[#0c121e] text-[10px] font-bold tracking-widest uppercase">
+                    Most Popular Choice
                   </div>
                 )}
-                
-                <h3 className="text-2xl font-black text-white mb-2">{tier.name}</h3>
-                <p className="text-gray-400 font-medium mb-8 h-12">{tier.desc}</p>
-                
-                <div className="mb-8 flex items-baseline">
-                  <span className="text-5xl font-black text-brand-yellow">{tier.price}</span>
-                  <span className="text-gray-400 ml-2 font-medium">/{tier.unit}</span>
-                </div>
-                
-                <div className="w-full h-px bg-white/10 mb-8"></div>
-                
-                <ul className="space-y-4 mb-10 flex-grow">
-                  {tier.features.map((feat, i) => (
-                    <li key={i} className="flex items-start">
-                      <CheckCircle2 className="text-brand-yellow mr-3 shrink-0 mt-0.5" size={20} />
-                      <span className="text-gray-300 font-medium">{feat}</span>
-                    </li>
-                  ))}
-                </ul>
-                
-                <button className={`w-full py-4 rounded-xl font-black text-sm tracking-widest uppercase transition-colors ${
-                  tier.recommended 
-                    ? 'bg-brand-yellow hover:bg-yellow-400 text-brand-navy' 
-                    : 'bg-white/10 hover:bg-white/20 text-white'
-                }`}>
-                  Select Package
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* 6. GALLERY */}
-      <section className="py-24 bg-white">
-        <div className="max-w-[1400px] mx-auto px-6">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-16">
-            <div>
-              <h4 className="text-brand-yellow text-sm font-bold tracking-widest uppercase mb-4">Inspiration</h4>
-              <h2 className="text-4xl md:text-5xl font-black text-brand-navy">Interior Gallery</h2>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {GALLERY_IMAGES.map((img, index) => (
-              <div key={index} className={`relative overflow-hidden rounded-xl group cursor-target ${index === 0 ? 'md:col-span-2 md:row-span-2 h-[600px]' : 'h-[290px]'}`}>
-                <Image 
-                  src={img} 
-                  alt={`Interior image ${index + 1}`} 
-                  fill
-                  className="object-cover group-hover:scale-110 transition-transform duration-700"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                />
-                <div className="absolute inset-0 bg-brand-navy/0 group-hover:bg-brand-navy/40 transition-colors duration-300 flex items-center justify-center">
-                  <div className="opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
-                    <button className="bg-white text-brand-navy px-6 py-2 rounded-full font-bold text-xs tracking-widest uppercase">
-                      View Design
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 7. FAQS */}
-      <section className="py-24 bg-gray-50 border-t border-gray-200">
-        <div className="max-w-4xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h4 className="text-brand-yellow text-sm font-bold tracking-widest uppercase mb-4">Got Questions?</h4>
-            <h2 className="text-4xl md:text-5xl font-black text-brand-navy">Frequently Asked Questions</h2>
-          </div>
-
-          <div className="space-y-4">
-            {FAQS.map((faq, index) => (
-              <div 
-                key={index} 
-                className={`bg-white border rounded-2xl overflow-hidden transition-all duration-300 cursor-target faq-item ${activeFaq === index ? 'border-brand-yellow shadow-md' : 'border-gray-200 hover:border-brand-yellow/50'}`}
-              >
-                <button 
-                  onClick={() => setActiveFaq(activeFaq === index ? null : index)}
-                  className="w-full px-8 py-6 text-left flex justify-between items-center focus:outline-none"
-                >
-                  <span className="text-lg font-bold text-brand-navy pr-8">{faq.q}</span>
-                  <ChevronDown 
-                    className={`text-brand-yellow shrink-0 transition-transform duration-300 ${activeFaq === index ? 'rotate-180' : ''}`} 
-                    size={24} 
-                  />
-                </button>
-                <div 
-                  className={`px-8 overflow-hidden transition-all duration-300 ease-in-out ${activeFaq === index ? 'max-h-96 pb-6 opacity-100' : 'max-h-0 opacity-0'}`}
-                >
-                  <p className="text-gray-600 font-medium leading-relaxed border-t border-gray-100 pt-4">
-                    {faq.a}
+                <div>
+                  <h3 className="font-serif text-2xl mb-2">{pkg.name}</h3>
+                  <p className={`text-xs mb-6 ${pkg.recommended ? "text-gray-400" : "text-gray-500"}`}>
+                    {pkg.desc}
                   </p>
+
+                  <div className="flex items-baseline gap-1 mb-8 pb-6 border-b border-black/10 dark:border-white/10">
+                    <span className="font-serif text-4xl sm:text-5xl font-normal text-[#c89d28]">
+                      {pkg.price}
+                    </span>
+                    <span className={`text-xs uppercase tracking-wider ${pkg.recommended ? "text-gray-400" : "text-gray-500"}`}>
+                      {pkg.unit}
+                    </span>
+                  </div>
+
+                  <ul className="space-y-3.5 mb-10">
+                    {pkg.features.map((feat, fIdx) => (
+                      <li key={fIdx} className="flex items-start gap-3 text-xs sm:text-sm font-light">
+                        <Check className="w-4 h-4 text-[#c89d28] shrink-0 mt-0.5" />
+                        <span>{feat}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
+
+                <Link
+                  href="/contact?service=interior"
+                  className={`w-full py-4 rounded-full text-center text-xs font-semibold tracking-widest uppercase transition-all ${
+                    pkg.recommended
+                      ? "bg-[#c89d28] hover:bg-[#b58b20] text-[#0c121e]"
+                      : "bg-[#0c121e] hover:bg-black text-[#faf8f5]"
+                  }`}
+                >
+                  Book Interior Consultation
+                </Link>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* 8. CTA */}
-      <section className="py-32 bg-brand-yellow relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10 flex items-center justify-center pointer-events-none">
-           <div className="w-[800px] h-[800px] border-[100px] border-brand-navy rounded-full absolute"></div>
-        </div>
-        
-        <div className="relative max-w-4xl mx-auto px-6 text-center z-10">
-          <h4 className="text-brand-navy text-sm font-bold tracking-[0.3em] uppercase mb-6">READY TO DECORATE?</h4>
-          <h2 className="text-5xl md:text-7xl font-black text-brand-navy leading-none mb-12">
-            Let&apos;s make your home beautiful.
+      {/* 6. FAQS */}
+      <section className="py-24 px-6 max-w-4xl mx-auto">
+        <div className="text-center mb-16">
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#c89d28] mb-3">
+            Common Inquiries
+          </p>
+          <h2 className="font-serif text-3xl sm:text-5xl font-normal text-[#0c121e]">
+            Frequently Asked Questions
           </h2>
-          
-          <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6">
-            <button className="w-full sm:w-auto bg-brand-navy hover:bg-[#162442] text-white px-12 py-5 rounded-full font-black text-sm tracking-widest uppercase shadow-2xl transition-transform hover:scale-105 cursor-target">
-              Book a Designer
-            </button>
-            <button className="w-full sm:w-auto bg-transparent hover:bg-white/30 text-brand-navy border-2 border-brand-navy px-12 py-5 rounded-full font-black text-sm tracking-widest uppercase transition-colors cursor-target">
-              Call +91 96319 80881
-            </button>
-          </div>
+        </div>
+
+        <div className="space-y-4">
+          {FAQS.map((faq, index) => (
+            <div
+              key={index}
+              className="bg-white rounded-2xl border border-black/5 overflow-hidden transition-all"
+            >
+              <button
+                onClick={() => setActiveFaq(activeFaq === index ? null : index)}
+                className="w-full px-7 py-6 text-left flex justify-between items-center gap-4 cursor-pointer"
+              >
+                <span className="font-serif text-lg text-[#0c121e] font-medium">
+                  {faq.q}
+                </span>
+                <ChevronDown
+                  className={`text-[#c89d28] shrink-0 transition-transform duration-300 ${
+                    activeFaq === index ? "rotate-180" : ""
+                  }`}
+                  size={20}
+                />
+              </button>
+              {activeFaq === index && (
+                <div className="px-7 pb-6 pt-2 border-t border-black/5 text-gray-600 font-light text-sm sm:text-base leading-relaxed">
+                  {faq.a}
+                </div>
+              )}
+            </div>
+          ))}
         </div>
       </section>
 
+      {/* 7. INTERIOR CTA */}
+      <section className="py-24 bg-[#0c121e] text-[#faf8f5] relative overflow-hidden">
+        <div className="relative max-w-5xl mx-auto px-6 text-center z-10">
+          <p className="text-xs font-semibold tracking-[0.3em] uppercase text-[#c89d28] mb-4">
+            Curate Your Sanctuary
+          </p>
+          <h2 className="font-serif text-3xl sm:text-5xl md:text-6xl font-normal mb-8 leading-tight">
+            Design a Home That Feels Like a <br />
+            <span className="italic text-[#c89d28]">Work of Art</span>
+          </h2>
+          <p className="text-gray-300 text-base sm:text-lg font-light max-w-2xl mx-auto mb-10 leading-relaxed">
+            Reserve a 1-on-1 design consultation with our interior styling directors. We review your floor plans and present customized 3D moodboards.
+          </p>
+
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+            <Link
+              href="/contact?service=interior"
+              className="w-full sm:w-auto bg-[#c89d28] hover:bg-[#b58b20] text-[#0c121e] px-10 py-4 rounded-full font-semibold text-xs tracking-widest uppercase shadow-xl transition-all"
+            >
+              Book Interior Consultation
+            </Link>
+            <a
+              href="tel:+917004465611"
+              className="w-full sm:w-auto border border-white/20 hover:border-white/40 text-[#faf8f5] px-10 py-4 rounded-full font-semibold text-xs tracking-widest uppercase transition-all bg-white/5"
+            >
+              Direct Helpline: +91 70044 65611
+            </a>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }

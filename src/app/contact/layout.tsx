@@ -1,15 +1,15 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Contact Us',
-  description: 'Get in touch with Galaxy Interior for your next luxury project.',
+  title: 'Contact & Studio Consultation | Galaxy Interior India',
+  description: 'Schedule an architectural consultation or visit our regional studios in Ranchi, Bhagalpur, Patna, and Kolkata. Verified helpline: +91 70044 65611.',
   openGraph: {
-    title: 'Contact Us | Galaxy Interior',
-    description: 'Get in touch with Galaxy Interior for your next luxury project.',
+    title: 'Contact Galaxy Interior India | Architecture, Interiors & Turnkey Build',
+    description: 'Get in touch with our Principal Architects and Civil Engineers for residential builds across Jharkhand, Bihar, and West Bengal.',
   },
 };
 
-export default function Layout({
+export default function ContactLayout({
   children,
 }: {
   children: React.ReactNode;

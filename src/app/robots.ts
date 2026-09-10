@@ -5,8 +5,8 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: '/admin/',
+      disallow: ['/dashboard/', '/login', '/register'],
     },
-    sitemap: 'https://galaxyinterior.in/sitemap.xml',
+    sitemap: 'https://galaxyinteriorindia.com/sitemap.xml',
   };
 }
