@@ -250,11 +250,11 @@ export default function ConstructionProjectPage() {
               <ArrowRight className="w-4 h-4" />
             </Link>
             <a
-              href="tel:+917004465611"
+              href="tel:+919631980881"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full border border-white/20 hover:border-white/40 text-[#faf8f5] font-semibold text-xs tracking-widest uppercase transition-all bg-white/5 backdrop-blur-sm"
             >
               <PhoneCall className="w-4 h-4 text-[#c89d28]" />
-              Helpline +91 70044 65611
+              Helpline +91 96319 80881
             </a>
           </div>
 
@@ -532,10 +532,10 @@ export default function ConstructionProjectPage() {
               Book Site Feasibility Visit
             </Link>
             <a
-              href="tel:+917004465611"
+              href="tel:+919631980881"
               className="w-full sm:w-auto border border-white/20 hover:border-white/40 text-[#faf8f5] px-10 py-4 rounded-full font-semibold text-xs tracking-widest uppercase transition-all bg-white/5"
             >
-              Direct Civil Helpline: +91 70044 65611
+              Direct Civil Helpline: +91 96319 80881
             </a>
           </div>
         </div>

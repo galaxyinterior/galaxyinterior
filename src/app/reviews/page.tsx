@@ -480,10 +480,10 @@ export default function ReviewsPage() {
                 Schedule Studio Consultation
               </Link>
               <a
-                href="tel:+917004465611"
+                href="tel:+919631980881"
                 className="w-full sm:w-auto px-8 py-4 bg-white/10 hover:bg-white/20 text-white border border-white/20 text-xs font-bold tracking-[0.18em] uppercase rounded-full transition-all"
               >
-                Call +91 70044 65611
+                Call +91 96319 80881
               </a>
             </div>
           </div>

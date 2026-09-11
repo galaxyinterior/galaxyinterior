@@ -299,7 +299,7 @@ export default function PricingCalculatorPage() {
       router.push("/projects");
     } catch (error) {
       console.error("Error submitting quote request:", error);
-      alert("Thank you! Your estimate details have been noted. You can also call us directly at +91 70044 65611.");
+      alert("Thank you! Your estimate details have been noted. You can also call us directly at +91 96319 80881.");
     } finally {
       setIsSubmitting(false);
     }

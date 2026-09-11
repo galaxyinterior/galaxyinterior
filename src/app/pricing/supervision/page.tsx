@@ -122,11 +122,11 @@ export default function SupervisionPackagesPage() {
               Book Site Feasibility Audit
             </Link>
             <a
-              href="tel:+917004465611"
+              href="tel:+919631980881"
               className="px-8 py-4 rounded-full border border-white/20 hover:border-white/40 text-[#faf8f5] font-semibold text-xs tracking-widest uppercase transition-all bg-white/5"
             >
               <PhoneCall className="w-4 h-4 inline mr-2 text-[#c89d28]" />
-              Helpline: +91 70044 65611
+              Helpline: +91 96319 80881
             </a>
           </div>
         </div>
@@ -232,11 +232,11 @@ export default function SupervisionPackagesPage() {
               Book Site Assessment
             </Link>
             <a
-              href="tel:+917004465611"
+              href="tel:+919631980881"
               className="px-8 py-4 rounded-full border border-white/20 hover:border-white/40 text-[#faf8f5] font-semibold text-xs tracking-widest uppercase transition-all bg-white/5"
             >
               <PhoneCall className="w-4 h-4 inline mr-2 text-[#c89d28]" />
-              Engineering Desk: +91 70044 65611
+              Engineering Desk: +91 96319 80881
             </a>
           </div>
         </div>

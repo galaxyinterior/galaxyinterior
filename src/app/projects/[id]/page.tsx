@@ -435,11 +435,11 @@ export default async function ProjectDetailPage({ params }: PageProps) {
               Discuss Your Project
             </Link>
             <a
-              href="tel:+917004465611"
+              href="tel:+919631980881"
               className="w-full sm:w-auto border border-white/20 hover:border-white/40 text-[#faf8f5] px-10 py-4 rounded-full font-semibold text-xs tracking-widest uppercase transition-all bg-white/5"
             >
               <PhoneCall className="w-4 h-4 inline mr-2 text-[#c89d28]" />
-              Call +91 70044 65611
+              Call +91 96319 80881
             </a>
           </div>
         </div>

@@ -605,11 +605,11 @@ export default function AboutPage() {
             </Link>
 
             <a
-              href="tel:+917004465611"
+              href="tel:+919631980881"
               className="w-full sm:w-auto px-8 py-4 rounded-full bg-white/[0.05] hover:bg-white/[0.1] text-white border border-white/20 font-bold text-xs uppercase tracking-[0.18em] transition-all flex items-center justify-center gap-2"
             >
               <PhoneCall className="w-3.5 h-3.5 text-brand-gold" />
-              <span>+91 70044 65611</span>
+              <span>+91 96319 80881</span>
             </a>
           </div>
         </div>

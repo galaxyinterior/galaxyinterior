@@ -3,7 +3,6 @@ import { Inter, Cormorant_Garamond } from 'next/font/google';
 import './globals.css';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
-import TargetCursor from '@/components/TargetCursor';
 import { AuthProvider } from "@/contexts/AuthContext";
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
@@ -115,14 +114,6 @@ export default function RootLayout({
         />
       </head>
       <body className={`${inter.variable} ${cormorant.variable} min-h-screen flex flex-col font-sans bg-[#faf8f5] text-[#0c121e] antialiased selection:bg-[#f1b821]/20`}>
-        {/* Single global TargetCursor instance — shared across all pages */}
-        <TargetCursor
-          spinDuration={2}
-          hideDefaultCursor={true}
-          parallaxOn={true}
-          targetSelector="button, a, .cursor-target, select, input, .faq-item"
-        />
-
         <AuthProvider>
           <Navbar />
           <main className="flex-grow pt-[68px] md:pt-[76px] lg:pt-[106px]">

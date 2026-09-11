@@ -176,7 +176,7 @@ export default function ContactPage() {
 
     const lastSubTime = localStorage.getItem('last_inquiry_time');
     if (lastSubTime && Date.now() - parseInt(lastSubTime) < 10 * 60 * 1000) {
-      alert('To prevent duplicate submissions, please wait a few minutes before submitting again. For urgent inquiries, call our direct studio line +91 70044 65611.');
+      alert('To prevent duplicate submissions, please wait a few minutes before submitting again. For urgent inquiries, call our direct studio line +91 96319 80881.');
       return;
     }
 
@@ -334,7 +334,8 @@ export default function ContactPage() {
     }
   };
 
-  const verifiedPhone = settings?.phone || '+91 70044 65611';
+  const verifiedPhone = settings?.phone || '+91 96319 80881';
+  const verifiedAltPhone = '+91 91227 95726';
   const verifiedEmail = settings?.email || 'contact@galaxyinteriorindia.com';
 
   return (
@@ -432,7 +433,7 @@ export default function ContactPage() {
                     <div>
                       <h4 className="font-serif text-lg font-bold text-red-900">Submission Error</h4>
                       <p className="text-sm text-red-800/80 mt-1">
-                        We could not process your submission right now. Please call our direct helpline at <a href="tel:+917004465611" className="underline font-bold">+91 70044 65611</a> or WhatsApp us.
+                        We could not process your submission right now. Please call our direct helpline at <a href="tel:+919631980881" className="underline font-bold">+91 96319 80881</a> or WhatsApp us.
                       </p>
                     </div>
                   </div>
@@ -919,8 +920,21 @@ export default function ContactPage() {
                     <Phone size={16} />
                   </div>
                   <div>
-                    <span className="text-[10px] uppercase text-white/50 tracking-wider font-bold block">Verified Helpline</span>
+                    <span className="text-[10px] uppercase text-white/50 tracking-wider font-bold block">Main Studio Helpline</span>
                     <span className="text-sm font-bold">{verifiedPhone}</span>
+                  </div>
+                </a>
+
+                <a
+                  href={`tel:${verifiedAltPhone.replace(/\s+/g, '')}`}
+                  className="flex items-center space-x-3 text-white hover:text-[#f1b821] transition-colors group p-3 bg-white/05 rounded-2xl border border-white/10"
+                >
+                  <div className="w-10 h-10 rounded-xl bg-white/10 border border-white/15 flex items-center justify-center text-white/80 shrink-0">
+                    <Phone size={16} />
+                  </div>
+                  <div>
+                    <span className="text-[10px] uppercase text-white/50 tracking-wider font-bold block">Sales & Project Desk</span>
+                    <span className="text-sm font-bold">{verifiedAltPhone}</span>
                   </div>
                 </a>
 
@@ -938,7 +952,7 @@ export default function ContactPage() {
                 </a>
 
                 <a
-                  href="https://wa.me/917004465611?text=Hello%20Galaxy%20Interior%2C%20I%20would%20like%20to%20discuss%20a%20turnkey%20residential%20project."
+                  href="https://wa.me/919631980881?text=Hello%20Galaxy%20Interior%2C%20I%20would%20like%20to%20discuss%20a%20turnkey%20residential%20project."
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full py-3.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold tracking-wider uppercase rounded-xl transition-all flex items-center justify-center space-x-2 shadow-md"
@@ -1036,7 +1050,7 @@ export default function ContactPage() {
 
               <div className="mt-6 pt-4 border-t border-[#0c121e]/08">
                 <a
-                  href={`https://wa.me/917004465611?text=Hello%20Galaxy%20Interior%20Team%2C%20I%20would%20like%20to%20visit%20the%20${encodeURIComponent(office.city)}%20studio.`}
+                  href={`https://wa.me/919631980881?text=Hello%20Galaxy%20Interior%20Team%2C%20I%20would%20like%20to%20visit%20the%20${encodeURIComponent(office.city)}%20studio.`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-xs font-bold tracking-wider uppercase text-[#0c121e] hover:text-[#c89d28] flex items-center justify-between group"

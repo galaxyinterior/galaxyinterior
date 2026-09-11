@@ -182,11 +182,11 @@ export default function FurniturePage() {
               <ArrowRight className="w-4 h-4" />
             </Link>
             <a
-              href="tel:+917004465611"
+              href="tel:+919631980881"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full border border-white/20 hover:border-white/40 text-[#faf8f5] font-semibold text-xs tracking-widest uppercase transition-all bg-white/5 backdrop-blur-sm"
             >
               <PhoneCall className="w-4 h-4 text-[#c89d28]" />
-              Helpline: +91 70044 65611
+              Helpline: +91 96319 80881
             </a>
           </div>
 
@@ -419,7 +419,7 @@ export default function FurniturePage() {
                       Proceed to Consultation Desk
                     </Link>
                     <a
-                      href="tel:+917004465611"
+                      href="tel:+919631980881"
                       className="px-6 py-3.5 rounded-full border border-black/15 hover:border-black/30 text-[#0c121e] text-center font-semibold text-xs tracking-widest uppercase transition-all flex items-center justify-center gap-1.5"
                     >
                       <PhoneCall className="w-4 h-4 text-[#c89d28]" />
@@ -455,11 +455,11 @@ export default function FurniturePage() {
               Order Fabric &amp; Wood Swatches
             </Link>
             <a
-              href="tel:+917004465611"
+              href="tel:+919631980881"
               className="w-full sm:w-auto border border-white/20 hover:border-white/40 text-[#faf8f5] px-10 py-4 rounded-full font-semibold text-xs tracking-widest uppercase transition-all bg-white/5"
             >
               <PhoneCall className="w-4 h-4 inline mr-2 text-[#c89d28]" />
-              Helpline: +91 70044 65611
+              Helpline: +91 96319 80881
             </a>
           </div>
         </div>
