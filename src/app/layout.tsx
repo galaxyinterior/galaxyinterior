@@ -4,6 +4,8 @@ import './globals.css';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { AuthProvider } from "@/contexts/AuthContext";
+import { Analytics } from '@vercel/analytics/next';
+import { FirebaseAnalyticsTracker } from '@/components/analytics/FirebaseAnalytics';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
 const cormorant = Cormorant_Garamond({
@@ -121,6 +123,9 @@ export default function RootLayout({
           </main>
           <Footer />
         </AuthProvider>
+
+        <Analytics />
+        <FirebaseAnalyticsTracker />
 
         {/* Floating WhatsApp Button */}
         <a
